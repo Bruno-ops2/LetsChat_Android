@@ -11,6 +11,7 @@ import androidx.appcompat.app.AppCompatActivity;
 public class StartActivity extends AppCompatActivity {
 
     private Button mRegBtn;
+    private Button mLoginBtn;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -23,6 +24,17 @@ public class StartActivity extends AppCompatActivity {
             public void onClick(View view) {
                 Intent registerActivity = new Intent(StartActivity.this, RegisterActivity.class);
                 startActivity(registerActivity);
+                finish();
+            }
+        });
+
+        mLoginBtn = (Button) findViewById(R.id.start_login_btn);
+        mLoginBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent loginActivity = new Intent(StartActivity.this, LoginActivity.class);
+                startActivity(loginActivity);
+                finish();
             }
         });
     }

@@ -2,6 +2,7 @@ package com.example.letschat;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -28,6 +29,7 @@ public class RegisterActivity extends AppCompatActivity {
     private TextInputLayout mPassword;
     private Button mSignupBtn;
     private FirebaseAuth mAuth;
+    private Toolbar mToolbar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,6 +41,11 @@ public class RegisterActivity extends AppCompatActivity {
         mPassword = (TextInputLayout) findViewById(R.id.reg_password_editText);
         mSignupBtn = (Button) findViewById(R.id.reg_signup_btn);
         mAuth = FirebaseAuth.getInstance();
+
+        mToolbar = (Toolbar) findViewById(R.id.reg_page_toolbar);
+        setSupportActionBar(mToolbar);
+        getSupportActionBar().setTitle("Create Account");
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         mSignupBtn.setOnClickListener(new View.OnClickListener() {
             @Override
