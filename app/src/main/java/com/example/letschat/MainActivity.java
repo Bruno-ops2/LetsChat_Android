@@ -3,12 +3,14 @@ package com.example.letschat;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.viewpager.widget.ViewPager;
 
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import com.google.android.material.tabs.TabLayout;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
@@ -16,6 +18,9 @@ public class MainActivity extends AppCompatActivity {
 
     private FirebaseAuth mAuth;
     private Toolbar mToolbar;
+    private ViewPager mTabPager;
+    private TabLayout mTabLayout;
+    private TabsAdaptor mTabsAdaptor;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -23,6 +28,11 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         mAuth = FirebaseAuth.getInstance();
+        mTabPager = (ViewPager) findViewById(R.id.main_tabpager);
+        mTabLayout = (TabLayout) findViewById(R.id.main_tabs);
+        mTabsAdaptor = new TabsAdaptor(getSupportFragmentManager());
+        mTabPager.setAdapter(mTabsAdaptor);
+        mTabLayout.setupWithViewPager(mTabPager);
 
         mToolbar = (Toolbar) findViewById(R.id.main_page_toolbar);
         setSupportActionBar(mToolbar);

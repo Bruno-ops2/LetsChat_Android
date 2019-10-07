@@ -4,11 +4,14 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -26,6 +29,7 @@ public class LoginActivity extends AppCompatActivity {
     private TextInputLayout mPassword;
     private Toolbar mToolbar;
     private Button mSigninBtn;
+    private ProgressDialog mProgressDiaglog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,6 +40,7 @@ public class LoginActivity extends AppCompatActivity {
         mEmail = (TextInputLayout) findViewById(R.id.login_email_editText);
         mPassword = (TextInputLayout) findViewById(R.id.login_password_editText);
         mSigninBtn = (Button) findViewById(R.id.login_signin_btn);
+        mProgressDiaglog = new ProgressDialog(this);
 
         mToolbar = (Toolbar) findViewById(R.id.login_page_toolbar);
         setSupportActionBar(mToolbar);
@@ -47,16 +52,31 @@ public class LoginActivity extends AppCompatActivity {
             public void onClick(View view) {
                 String email = mEmail.getEditText().getText().toString();
                 String password = mPassword.getEditText().getText().toString();
-                mAuth.signInWithEmailAndPassword(email, password)
-                        .addOnCompleteListener(LoginActivity.this, new OnCompleteListener<AuthResult>() {
-                            @Override
-                            public void onComplete(@NonNull Task<AuthResult> task) {
-                                Log.d(TAG, "SignInWithEmail:success");
-                                Intent mainActivity = new Intent(LoginActivity.this, MainActivity.class);
-                                startActivity(mainActivity);
-                                finish();
-                            }
-                        });
+                if(!TextUtils.isEmpty(email) || !TextUtils.isEmpty(password)) {
+                    mProgressDiaglog.setTitle("Logging in");
+                    mProgressDiaglog.setMessage("Please wait while check your Email and Password");
+                    mProgressDiaglog.setCanceledOnTouchOutside(false);
+                    mProgressDiaglog.show();
+                    mAuth.signInWithEmailAndPassword(email, password)
+                            .addOnCompleteListener(LoginActivity.this, new OnCompleteListener<AuthResult>() {
+                                @Override
+                                public void onComplete(@NonNull Task<AuthResult> task) {
+                                    if (task.isSuccessful()) {
+                                        mProgressDiaglog.dismiss();
+                                        Log.d(TAG, "SignInWithEmail:success");
+                                        Intent mainActivity = new Intent(LoginActivity.this, MainActivity.class);
+                                        mainActivity.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                                        startActivity(mainActivity);
+                                        finish();
+                                    } else {
+                                        mProgressDiaglog.hide();
+                                        Log.d(TAG, "SignInWithEmail:failure");
+                                    }
+                                }
+                            });
+                } else {
+                    Toast.makeText(LoginActivity.this, "Please fill the provided fields properly", Toast.LENGTH_SHORT).show();
+                }
             }
         });
     }
