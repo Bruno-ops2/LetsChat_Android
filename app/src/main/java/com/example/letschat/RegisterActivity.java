@@ -20,8 +20,12 @@ import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
 import org.w3c.dom.Text;
+
+import java.util.HashMap;
 
 public class RegisterActivity extends AppCompatActivity {
 
@@ -34,6 +38,7 @@ public class RegisterActivity extends AppCompatActivity {
     private FirebaseAuth mAuth;
     private Toolbar mToolbar;
     private ProgressDialog mProgressDialog;
+    private DatabaseReference mDatabase;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,8 +60,9 @@ public class RegisterActivity extends AppCompatActivity {
         mSignupBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                String email = mEmail.getEditText().getText().toString();
-                String password = mPassword.getEditText().getText().toString();
+                final String email = mEmail.getEditText().getText().toString();
+                final String password = mPassword.getEditText().getText().toString();
+                final String name = mDisplayName.getEditText().getText().toString();
                 if(!TextUtils.isEmpty(email) || !TextUtils.isEmpty(password)) {
                     mProgressDialog.setTitle("Registering User");
                     mProgressDialog.setMessage("Please wait while we create your account");
@@ -67,13 +73,29 @@ public class RegisterActivity extends AppCompatActivity {
                                 @Override
                                 public void onComplete(@NonNull Task<AuthResult> task) {
                                     if (task.isSuccessful()) {
-                                        mProgressDialog.dismiss();
-                                        Log.d(TAG, "createUserWithEmail:success");
-                                        Toast.makeText(RegisterActivity.this, "Success", Toast.LENGTH_SHORT).show();
-                                        Intent mainActivity = new Intent(RegisterActivity.this, MainActivity.class);
-                                        mainActivity.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                                        startActivity(mainActivity);
-                                        finish();
+
+                                        String uid = mAuth.getCurrentUser().getUid().toString();
+                                        mDatabase = FirebaseDatabase.getInstance().getReference().child("users").child(uid);
+                                        HashMap<String, String> regUser = new HashMap<>();
+                                        regUser.put("name", name);
+                                        regUser.put("status", "Hey there! I'm using Lets Chat");
+                                        regUser.put("profile_image", "default image");
+                                        regUser.put("thumbnail_image", "default_image");
+                                        mDatabase.setValue(regUser).addOnCompleteListener(new OnCompleteListener<Void>() {
+                                            @Override
+                                            public void onComplete(@NonNull Task<Void> task) {
+                                                if(task.isSuccessful()) {
+                                                    mProgressDialog.dismiss();
+                                                    Log.d(TAG, "createUserWithEmail:success");
+                                                    Toast.makeText(RegisterActivity.this, "Success", Toast.LENGTH_SHORT).show();
+                                                    Intent mainActivity = new Intent(RegisterActivity.this, MainActivity.class);
+                                                    mainActivity.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                                                    startActivity(mainActivity);
+                                                    finish();
+                                                }
+                                            }
+                                        });
+
                                     } else {
                                         mProgressDialog.hide();
                                         Log.e(TAG, "createUserWithEmail:failure");
