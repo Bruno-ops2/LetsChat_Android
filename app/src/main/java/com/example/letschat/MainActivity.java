@@ -70,6 +70,9 @@ public class MainActivity extends AppCompatActivity {
         if(item.getItemId() == R.id.main_menu_item_logout) {
             mAuth.signOut();
             sendToStart();
+        } else if (item.getItemId() ==  R.id.main_manu_item_settings) {
+            Intent settingsIntent = new Intent(MainActivity.this, SettingsActivity.class);
+            startActivity(settingsIntent);
         }
 
         return true;
