@@ -54,7 +54,7 @@ public class LoginActivity extends AppCompatActivity {
                 String password = mPassword.getEditText().getText().toString();
                 if(!TextUtils.isEmpty(email) || !TextUtils.isEmpty(password)) {
                     mProgressDiaglog.setTitle("Logging in");
-                    mProgressDiaglog.setMessage("Please wait while check your Email and Password");
+                    mProgressDiaglog.setMessage("Please wait while we check your Email and Password");
                     mProgressDiaglog.setCanceledOnTouchOutside(false);
                     mProgressDiaglog.show();
                     mAuth.signInWithEmailAndPassword(email, password)
