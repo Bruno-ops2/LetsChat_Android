@@ -60,11 +60,11 @@ public class SettingsActivity extends AppCompatActivity {
         mDatabase = FirebaseDatabase.getInstance().getReference().child("users").child(FirebaseAuth.getInstance().getCurrentUser().getUid());
         mStorage = FirebaseStorage.getInstance().getReference();
         mCurrentUser = FirebaseAuth.getInstance().getCurrentUser();
-        mStatus = (TextView) findViewById(R.id.settings_status_textView);
-        mName = (TextView) findViewById(R.id.settings_name_textView);
-        mStatusUpdateBtn = (Button) findViewById(R.id.settings_change_status_button);
-        mChangeDpBtn = (Button) findViewById(R.id.settings_change_profile_button);
-        mProfileImage = (CircleImageView) findViewById(R.id.settings_profile_circleImageView);
+        mStatus = findViewById(R.id.settings_status_textView);
+        mName = findViewById(R.id.settings_name_textView);
+        mStatusUpdateBtn = findViewById(R.id.settings_change_status_button);
+        mChangeDpBtn = findViewById(R.id.settings_change_profile_button);
+        mProfileImage = findViewById(R.id.settings_profile_circleImageView);
 
         mChangeDpBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -72,12 +72,6 @@ public class SettingsActivity extends AppCompatActivity {
                 CropImage.activity()
                         .setGuidelines(CropImageView.Guidelines.ON).setAspectRatio(1, 1)
                         .start(SettingsActivity.this);
-
-                /*Intent intent = new Intent();
-                intent.setType("image/*");
-                intent.setAction(Intent.ACTION_GET_CONTENT);
-                startActivityForResult(Intent.createChooser(intent, "SELECT IMAGE"), PICK_IMAGE_REQUEST);*/
-
             }
         });
 
@@ -114,7 +108,7 @@ public class SettingsActivity extends AppCompatActivity {
             if (resultCode == RESULT_OK) {
                 final Uri resultUri = result.getUri();
                 Log.d(TAG, "got the URI: " + resultUri.toString());
-                final StorageReference dpRef = mStorage.child("profile_images/"+mCurrentUser.getUid().toString() + ".jpg");
+                final StorageReference dpRef = mStorage.child("profile_images/" + mCurrentUser.getUid().toString() + ".jpg");
                 UploadTask uploadTask = dpRef.putFile(resultUri);
 
                 uploadTask.addOnFailureListener(new OnFailureListener() {
@@ -131,52 +125,15 @@ public class SettingsActivity extends AppCompatActivity {
                         mDatabase.child("profile_image").setValue(resultUri.toString());
 
                     }
-                });/*.continueWithTask(new Continuation<UploadTask.TaskSnapshot, Task<Uri>>() {
-                    @Override
-                    public Task<Uri> then(@NonNull Task<UploadTask.TaskSnapshot> task) throws Exception {
-                        if(!task.isSuccessful()) {
-                            throw task.getException();
-                        }
-
-                        return dpRef.getDownloadUrl();
-                    }
-                }).addOnCompleteListener(new OnCompleteListener<Uri>() {
-                    @Override
-                    public void onComplete(@NonNull Task<Uri> task) {
-                        if(task.isSuccessful()) {
-                            mProfileDownloadUri = task.getResult();
-
-                        } else {
-                            Log.d(TAG, "Unable to get the Uploaded Profile Image URL");
-                        }
-                    }
-                });*/
-
+                });
 
             } else if (resultCode == CropImage.CROP_IMAGE_ACTIVITY_RESULT_ERROR_CODE) {
                 Exception error = result.getError();
             }
-
-                /*
-                dpRef.putFile(resultUri).addOnCompleteListener(new OnCompleteListener<UploadTask.TaskSnapshot>() {
-                    @Override
-                    public void onComplete(@NonNull Task<UploadTask.TaskSnapshot> task) {
-
-                        if(task.isSuccessful()) {
-                            Log.d(TAG, "File uploaded");
-                        }else
-                            Log.d(TAG, "Unable to upload file");
-                    }
-                }).addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        Log.d(TAG, "Task Failed");
-                    }
-                });*/
-            }
         }
-
-
     }
+
+
+}
 
 
