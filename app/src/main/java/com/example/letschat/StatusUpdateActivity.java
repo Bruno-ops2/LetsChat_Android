@@ -68,6 +68,7 @@ public class StatusUpdateActivity extends AppCompatActivity {
                             mProgressDiaglog.dismiss();
                             Log.d(TAG, "Status Updated Successfully");
                             Toast.makeText(StatusUpdateActivity.this, "Status Updated Successfully", Toast.LENGTH_SHORT).show();
+                            finish();
                         } else {
                             Log.d(TAG, "Unable to Update Status");
                             mProgressDiaglog.hide();

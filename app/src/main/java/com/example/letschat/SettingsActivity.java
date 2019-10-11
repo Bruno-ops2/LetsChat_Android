@@ -6,6 +6,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.Picture;
 import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
@@ -14,6 +15,11 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.tasks.Continuation;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -21,16 +27,29 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
+import com.squareup.picasso.Picasso;
 import com.theartofdev.edmodo.cropper.CropImage;
+import com.theartofdev.edmodo.cropper.CropImageView;
+
+import de.hdodenhof.circleimageview.CircleImageView;
 
 public class SettingsActivity extends AppCompatActivity {
 
     private static final String TAG = "SettingsActivity";
     private static final int PICK_IMAGE_REQUEST = 1;
 
+    //Firebase
     private DatabaseReference mDatabase;
+    private StorageReference mStorage;
+    private FirebaseUser mCurrentUser;
+
     private TextView mStatus;
     private TextView mName;
+    private Uri mProfileDownloadUri;
+    private CircleImageView mProfileImage;
     private Button mStatusUpdateBtn;
     private Button mChangeDpBtn;
 
@@ -38,18 +57,26 @@ public class SettingsActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_settings);
+        mDatabase = FirebaseDatabase.getInstance().getReference().child("users").child(FirebaseAuth.getInstance().getCurrentUser().getUid());
+        mStorage = FirebaseStorage.getInstance().getReference();
+        mCurrentUser = FirebaseAuth.getInstance().getCurrentUser();
         mStatus = (TextView) findViewById(R.id.settings_status_textView);
         mName = (TextView) findViewById(R.id.settings_name_textView);
         mStatusUpdateBtn = (Button) findViewById(R.id.settings_change_status_button);
         mChangeDpBtn = (Button) findViewById(R.id.settings_change_profile_button);
+        mProfileImage = (CircleImageView) findViewById(R.id.settings_profile_circleImageView);
 
         mChangeDpBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent();
+                CropImage.activity()
+                        .setGuidelines(CropImageView.Guidelines.ON).setAspectRatio(1, 1)
+                        .start(SettingsActivity.this);
+
+                /*Intent intent = new Intent();
                 intent.setType("image/*");
                 intent.setAction(Intent.ACTION_GET_CONTENT);
-                startActivityForResult(Intent.createChooser(intent, "Select Image"), PICK_IMAGE_REQUEST);
+                startActivityForResult(Intent.createChooser(intent, "SELECT IMAGE"), PICK_IMAGE_REQUEST);*/
 
             }
         });
@@ -62,12 +89,13 @@ public class SettingsActivity extends AppCompatActivity {
             }
         });
 
-        mDatabase = FirebaseDatabase.getInstance().getReference().child("users").child(FirebaseAuth.getInstance().getCurrentUser().getUid());
         mDatabase.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 mName.setText(dataSnapshot.child("name").getValue().toString());
                 mStatus.setText(dataSnapshot.child("status").getValue().toString());
+                String imageUri = dataSnapshot.child("profile_image").getValue().toString();
+                Picasso.get().load(imageUri).placeholder(R.drawable.avatar).into(mProfileImage);
             }
 
             @Override
@@ -80,21 +108,75 @@ public class SettingsActivity extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if(requestCode == PICK_IMAGE_REQUEST && requestCode == PICK_IMAGE_REQUEST) {
-            Log.d(TAG, "Successfully Selected the Image");
-            Toast.makeText(this, "Got the Image", Toast.LENGTH_SHORT).show();
-            Uri uri = data.getData();
-            CropImage.activity(uri).setAspectRatio(1,1).start(this);
-        }
-
+        Log.d(TAG, "onActivityResult Started");
         if (requestCode == CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE) {
-            CropImage.ActivityResult result = CropImage.getActivityResult(data);
+            final CropImage.ActivityResult result = CropImage.getActivityResult(data);
             if (resultCode == RESULT_OK) {
-                Uri resultUri = result.getUri();
+                final Uri resultUri = result.getUri();
+                Log.d(TAG, "got the URI: " + resultUri.toString());
+                final StorageReference dpRef = mStorage.child("profile_images/"+mCurrentUser.getUid().toString() + ".jpg");
+                UploadTask uploadTask = dpRef.putFile(resultUri);
+
+                uploadTask.addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Toast.makeText(SettingsActivity.this, "Unable to Upload, Check Your Internet Connection", Toast.LENGTH_SHORT).show();
+                        Log.d(TAG, "Unable to Upload, Check Your Internet Connection");
+                    }
+                }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                    @Override
+                    public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                        Toast.makeText(SettingsActivity.this, "Profile Updated", Toast.LENGTH_SHORT).show();
+                        Log.d(TAG, "new Photo uploaded : " + resultUri);
+                        mDatabase.child("profile_image").setValue(resultUri.toString());
+
+                    }
+                });/*.continueWithTask(new Continuation<UploadTask.TaskSnapshot, Task<Uri>>() {
+                    @Override
+                    public Task<Uri> then(@NonNull Task<UploadTask.TaskSnapshot> task) throws Exception {
+                        if(!task.isSuccessful()) {
+                            throw task.getException();
+                        }
+
+                        return dpRef.getDownloadUrl();
+                    }
+                }).addOnCompleteListener(new OnCompleteListener<Uri>() {
+                    @Override
+                    public void onComplete(@NonNull Task<Uri> task) {
+                        if(task.isSuccessful()) {
+                            mProfileDownloadUri = task.getResult();
+
+                        } else {
+                            Log.d(TAG, "Unable to get the Uploaded Profile Image URL");
+                        }
+                    }
+                });*/
+
 
             } else if (resultCode == CropImage.CROP_IMAGE_ACTIVITY_RESULT_ERROR_CODE) {
                 Exception error = result.getError();
             }
+
+                /*
+                dpRef.putFile(resultUri).addOnCompleteListener(new OnCompleteListener<UploadTask.TaskSnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<UploadTask.TaskSnapshot> task) {
+
+                        if(task.isSuccessful()) {
+                            Log.d(TAG, "File uploaded");
+                        }else
+                            Log.d(TAG, "Unable to upload file");
+                    }
+                }).addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Log.d(TAG, "Task Failed");
+                    }
+                });*/
+            }
         }
+
+
     }
-}
+
+

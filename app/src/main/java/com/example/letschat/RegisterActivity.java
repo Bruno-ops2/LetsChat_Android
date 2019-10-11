@@ -79,7 +79,7 @@ public class RegisterActivity extends AppCompatActivity {
                                         HashMap<String, String> regUser = new HashMap<>();
                                         regUser.put("name", name);
                                         regUser.put("status", "Hey there! I'm using Lets Chat");
-                                        regUser.put("profile_image", "default image");
+                                        regUser.put("profile_image", "default");
                                         regUser.put("thumbnail_image", "default_image");
                                         mDatabase.setValue(regUser).addOnCompleteListener(new OnCompleteListener<Void>() {
                                             @Override
