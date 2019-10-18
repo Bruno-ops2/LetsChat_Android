@@ -75,7 +75,7 @@ public class RegisterActivity extends AppCompatActivity {
                                     if (task.isSuccessful()) {
 
                                         String uid = mAuth.getCurrentUser().getUid().toString();
-                                        mDatabase = FirebaseDatabase.getInstance().getReference().child("users").child(uid);
+                                        mDatabase = FirebaseDatabase.getInstance().getReference().child("Users").child(uid);
                                         HashMap<String, String> regUser = new HashMap<>();
                                         regUser.put("name", name);
                                         regUser.put("status", "Hey there! I'm using Lets Chat");

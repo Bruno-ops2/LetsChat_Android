@@ -74,7 +74,7 @@ public class MainActivity extends AppCompatActivity {
             Intent settingsIntent = new Intent(MainActivity.this, SettingsActivity.class);
             startActivity(settingsIntent);
         } else if (item.getItemId() == R.id.main_menu_item_all_users) {
-            Intent allUsersIntent = new Intent(MainActivity.this, AllUsers.class);
+            Intent allUsersIntent = new Intent(MainActivity.this, AllUsersActivity.class);
             startActivity(allUsersIntent);
         }
 
