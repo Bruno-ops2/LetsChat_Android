@@ -34,7 +34,11 @@ import com.squareup.picasso.Picasso;
 import com.theartofdev.edmodo.cropper.CropImage;
 import com.theartofdev.edmodo.cropper.CropImageView;
 
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+
 import de.hdodenhof.circleimageview.CircleImageView;
+import id.zelory.compressor.Compressor;
 
 public class SettingsActivity extends AppCompatActivity {
 
@@ -48,7 +52,6 @@ public class SettingsActivity extends AppCompatActivity {
 
     private TextView mStatus;
     private TextView mName;
-    private Uri mProfileDownloadUri;
     private CircleImageView mProfileImage;
     private Button mStatusUpdateBtn;
     private Button mChangeDpBtn;
@@ -110,9 +113,27 @@ public class SettingsActivity extends AppCompatActivity {
             final CropImage.ActivityResult result = CropImage.getActivityResult(data);
             if (resultCode == RESULT_OK) {
                 final Uri resultUri = result.getUri();
+                Bitmap thumbnail = null;
+                try {
+                    thumbnail = new Compressor(this)
+                                            .setQuality(75)
+                                            .setMaxHeight(200)
+                                            .setMaxWidth(200)
+                                            .compressToBitmap(new File(resultUri.getPath()));
+                } catch (Exception e) {
+                    Log.d(TAG, "onActivityResult: " + e);
+                }
+
+                ByteArrayOutputStream stream = new ByteArrayOutputStream();
+                thumbnail.compress(Bitmap.CompressFormat.JPEG, 100, stream);
+                final byte[] thumbnailByteArray = stream.toByteArray();
+
                 Log.d(TAG, "got the URI: " + resultUri.toString());
-                final StorageReference dpRef = mStorage.child("profile_images/" + mCurrentUser.getUid().toString() + ".jpg");
+                final StorageReference dpRef = mStorage.child("profile_images/" + mCurrentUser.getUid() + ".jpg");
+                final StorageReference thumbRef = mStorage.child("profile_images/thumbs/" + mCurrentUser.getUid() + ".jpg");
+
                 UploadTask uploadTask = dpRef.putFile(resultUri);
+
 
                 uploadTask.addOnFailureListener(new OnFailureListener() {
                     @Override
@@ -123,12 +144,24 @@ public class SettingsActivity extends AppCompatActivity {
                 }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
                     @Override
                     public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                        Toast.makeText(SettingsActivity.this, "Profile Updated", Toast.LENGTH_SHORT).show();
-                        dpRef.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                        UploadTask thumbUploadTask = thumbRef.putBytes(thumbnailByteArray);
+                        thumbUploadTask.addOnCompleteListener(new OnCompleteListener<UploadTask.TaskSnapshot>() {
                             @Override
-                            public void onSuccess(Uri uri) {
-                                Log.d(TAG, "new Photo uploaded : " + uri);
-                                mDatabase.child("profile_image").setValue(uri.toString());
+                            public void onComplete(@NonNull Task<UploadTask.TaskSnapshot> task) {
+                                Toast.makeText(SettingsActivity.this, "Profile Updated", Toast.LENGTH_SHORT).show();
+                                dpRef.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                                    @Override
+                                    public void onSuccess(Uri uri) {
+                                        Log.d(TAG, "new Photo uploaded : " + uri);
+                                        mDatabase.child("profile_image").setValue(uri.toString());
+                                        thumbRef.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                                            @Override
+                                            public void onSuccess(Uri uri) {
+                                                mDatabase.child("thumbnail_image").setValue(uri.toString());
+                                            }
+                                        });
+                                    }
+                                });
                             }
                         });
 
