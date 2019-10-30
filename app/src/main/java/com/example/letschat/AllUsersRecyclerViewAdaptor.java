@@ -49,7 +49,7 @@ public class AllUsersRecyclerViewAdaptor extends RecyclerView.Adapter<AllUsersRe
         Log.d(TAG, "onBindViewHolder called");
         String name = usersDatabaseResponse.get(position).child("name").getValue().toString();
         String status = usersDatabaseResponse.get(position).child("status").getValue().toString();
-        String profile_image = usersDatabaseResponse.get(position).child("profile_image").getValue().toString();
+        String profile_image = usersDatabaseResponse.get(position).child("thumbnail_image").getValue().toString();
         Log.d(TAG, "view holder name : " + name);
         Log.d(TAG, "view holder status : " + status);
         holder.name.setText(name);
