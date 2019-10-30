@@ -87,8 +87,11 @@ public class SettingsActivity extends AppCompatActivity {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 mName.setText(dataSnapshot.child("name").getValue().toString());
+                Log.d(TAG, "onDataChange: name fetched");
                 mStatus.setText(dataSnapshot.child("status").getValue().toString());
+                Log.d(TAG, "onDataChange: data fetched");
                 String imageUri = dataSnapshot.child("profile_image").getValue().toString();
+                Log.d(TAG, "onDataChange: image url fetched : " + imageUri);
                 Picasso.get().load(imageUri).placeholder(R.drawable.avatar).into(mProfileImage);
             }
 
@@ -121,8 +124,13 @@ public class SettingsActivity extends AppCompatActivity {
                     @Override
                     public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
                         Toast.makeText(SettingsActivity.this, "Profile Updated", Toast.LENGTH_SHORT).show();
-                        Log.d(TAG, "new Photo uploaded : " + resultUri);
-                        mDatabase.child("profile_image").setValue(resultUri.toString());
+                        dpRef.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                            @Override
+                            public void onSuccess(Uri uri) {
+                                Log.d(TAG, "new Photo uploaded : " + uri);
+                                mDatabase.child("profile_image").setValue(uri.toString());
+                            }
+                        });
 
                     }
                 });

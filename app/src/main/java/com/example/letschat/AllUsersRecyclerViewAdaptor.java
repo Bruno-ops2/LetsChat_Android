@@ -6,6 +6,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -16,6 +17,7 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
+import com.squareup.picasso.Picasso;
 
 import org.json.JSONObject;
 
@@ -47,10 +49,12 @@ public class AllUsersRecyclerViewAdaptor extends RecyclerView.Adapter<AllUsersRe
         Log.d(TAG, "onBindViewHolder called");
         String name = usersDatabaseResponse.get(position).child("name").getValue().toString();
         String status = usersDatabaseResponse.get(position).child("status").getValue().toString();
+        String profile_image = usersDatabaseResponse.get(position).child("profile_image").getValue().toString();
         Log.d(TAG, "view holder name : " + name);
         Log.d(TAG, "view holder status : " + status);
         holder.name.setText(name);
         holder.status.setText(status);
+        Picasso.get().load(profile_image).placeholder(R.drawable.avatar).into(holder.profileImage);
     }
 
     @Override
@@ -62,11 +66,14 @@ public class AllUsersRecyclerViewAdaptor extends RecyclerView.Adapter<AllUsersRe
 
         TextView name;
         TextView status;
+        ImageView profileImage;
+
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
             name = itemView.findViewById(R.id.single_user_name);
             status = itemView.findViewById(R.id.single_user_status);
+            profileImage = itemView.findViewById(R.id.single_user_profile);
         }
 
     }

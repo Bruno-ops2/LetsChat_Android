@@ -59,7 +59,7 @@ public class StatusUpdateActivity extends AppCompatActivity {
                 mProgressDiaglog.setCanceledOnTouchOutside(false);
                 mProgressDiaglog.show();
                 mAuth = FirebaseAuth.getInstance();
-                mDatabase = FirebaseDatabase.getInstance().getReference().child("users").child(mAuth.getCurrentUser().getUid()).child("status");
+                mDatabase = FirebaseDatabase.getInstance().getReference().child("Users").child(mAuth.getCurrentUser().getUid()).child("status");
 
                 mDatabase.setValue(newStatus).addOnCompleteListener(new OnCompleteListener<Void>() {
                     @Override
