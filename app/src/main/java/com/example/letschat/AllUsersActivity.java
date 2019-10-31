@@ -18,6 +18,8 @@ import android.widget.TextView;
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.firebase.ui.database.FirebaseRecyclerOptions;
 import com.firebase.ui.database.SnapshotParser;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -70,6 +72,11 @@ public class AllUsersActivity extends AppCompatActivity implements AllUsersRecyc
                 for (DataSnapshot dataSnapshot1 : dataSnapshot.getChildren()) {
                     Log.d(TAG, dataSnapshot1.toString());
                     Log.d(TAG, "onDataChange: user key : " + dataSnapshot1.getKey().toString());
+
+                    //if the key is equal to the user itself dont add that data snapshot to the array
+                    if(dataSnapshot1.getKey().equals(FirebaseAuth.getInstance().getCurrentUser().getUid()))
+                        continue;
+                    
                     usersDatabaseResponse.add(dataSnapshot1);
                     Log.d(TAG, "Item Count : " + usersDatabaseResponse.size());
                     allUsersRecyclerViewAdaptor.notifyDataSetChanged();
