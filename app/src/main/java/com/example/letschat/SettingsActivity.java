@@ -116,10 +116,10 @@ public class SettingsActivity extends AppCompatActivity {
                 Bitmap thumbnail = null;
                 try {
                     thumbnail = new Compressor(this)
-                                            .setQuality(75)
-                                            .setMaxHeight(200)
-                                            .setMaxWidth(200)
-                                            .compressToBitmap(new File(resultUri.getPath()));
+                            .setQuality(75)
+                            .setMaxHeight(200)
+                            .setMaxWidth(200)
+                            .compressToBitmap(new File(resultUri.getPath()));
                 } catch (Exception e) {
                     Log.d(TAG, "onActivityResult: " + e);
                 }

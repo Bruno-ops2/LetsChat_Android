@@ -7,6 +7,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewpager.widget.PagerAdapter;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -30,7 +31,7 @@ import java.sql.SQLNonTransientConnectionException;
 import java.util.ArrayList;
 import java.util.concurrent.RecursiveAction;
 
-public class AllUsersActivity extends AppCompatActivity {
+public class AllUsersActivity extends AppCompatActivity implements AllUsersRecyclerViewAdaptor.OnItemClick {
 
     private Toolbar mToolbar;
     private static String TAG = "AllUsersActivity";
@@ -56,6 +57,7 @@ public class AllUsersActivity extends AppCompatActivity {
 
         RecyclerView recyclerView = findViewById(R.id.all_users_recyclerView);
         allUsersRecyclerViewAdaptor = new AllUsersRecyclerViewAdaptor(usersDatabaseResponse, this);
+        allUsersRecyclerViewAdaptor.setOnClick(AllUsersActivity.this);
         recyclerView.setAdapter(allUsersRecyclerViewAdaptor);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
     }
@@ -82,4 +84,10 @@ public class AllUsersActivity extends AppCompatActivity {
         });
     }
 
+    @Override
+    public void onItemClick(int position) {
+        //testing intent to some random activity
+        Intent accountSettings = new Intent(AllUsersActivity.this, SettingsActivity.class);
+        startActivity(accountSettings);
+    }
 }

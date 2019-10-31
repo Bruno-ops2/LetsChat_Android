@@ -1,6 +1,5 @@
 package com.example.letschat;
 
-import android.app.DownloadManager;
 import android.content.Context;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -13,13 +12,8 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
-import com.google.firebase.database.ValueEventListener;
 import com.squareup.picasso.Picasso;
-
-import org.json.JSONObject;
 
 import java.util.ArrayList;
 
@@ -29,6 +23,13 @@ public class AllUsersRecyclerViewAdaptor extends RecyclerView.Adapter<AllUsersRe
     private ArrayList<DataSnapshot> usersDatabaseResponse;
     private Context mContext;
     private Query query;
+
+    //interface for OnItemClick
+    public interface OnItemClick {
+        void onItemClick(int position);
+    }
+
+    private OnItemClick onClick;
 
     public AllUsersRecyclerViewAdaptor(final ArrayList<DataSnapshot> usersDatabaseResponse, Context mContext) {
         this.usersDatabaseResponse = usersDatabaseResponse;
@@ -45,7 +46,7 @@ public class AllUsersRecyclerViewAdaptor extends RecyclerView.Adapter<AllUsersRe
     }
 
     @Override
-    public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull ViewHolder holder, final int position) {
         Log.d(TAG, "onBindViewHolder called");
         String name = usersDatabaseResponse.get(position).child("name").getValue().toString();
         String status = usersDatabaseResponse.get(position).child("status").getValue().toString();
@@ -55,6 +56,12 @@ public class AllUsersRecyclerViewAdaptor extends RecyclerView.Adapter<AllUsersRe
         holder.name.setText(name);
         holder.status.setText(status);
         Picasso.get().load(profile_image).placeholder(R.drawable.avatar).into(holder.profileImage);
+        holder.profileImage.getRootView().setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                onClick.onItemClick(position);
+            }
+        });
     }
 
     @Override
@@ -76,5 +83,9 @@ public class AllUsersRecyclerViewAdaptor extends RecyclerView.Adapter<AllUsersRe
             profileImage = itemView.findViewById(R.id.single_user_profile);
         }
 
+    }
+
+    public void setOnClick(OnItemClick onClick) {
+        this.onClick = onClick;
     }
 }
