@@ -86,8 +86,7 @@ public class AllUsersActivity extends AppCompatActivity implements AllUsersRecyc
 
     @Override
     public void onItemClick(int position) {
-        //testing intent to some random activity
-        Intent accountSettings = new Intent(AllUsersActivity.this, SettingsActivity.class);
-        startActivity(accountSettings);
+        Intent profileActivity = new Intent(AllUsersActivity.this, ProfileActivity.class);
+        startActivity(profileActivity);
     }
 }
