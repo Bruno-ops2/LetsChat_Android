@@ -69,6 +69,7 @@ public class AllUsersActivity extends AppCompatActivity implements AllUsersRecyc
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 for (DataSnapshot dataSnapshot1 : dataSnapshot.getChildren()) {
                     Log.d(TAG, dataSnapshot1.toString());
+                    Log.d(TAG, "onDataChange: user key : " + dataSnapshot1.getKey().toString());
                     usersDatabaseResponse.add(dataSnapshot1);
                     Log.d(TAG, "Item Count : " + usersDatabaseResponse.size());
                     allUsersRecyclerViewAdaptor.notifyDataSetChanged();
@@ -87,6 +88,8 @@ public class AllUsersActivity extends AppCompatActivity implements AllUsersRecyc
     @Override
     public void onItemClick(int position) {
         Intent profileActivity = new Intent(AllUsersActivity.this, ProfileActivity.class);
+        //sending userID to the intent
+        profileActivity.putExtra("UserId", usersDatabaseResponse.get(position).getKey());
         startActivity(profileActivity);
     }
 }
