@@ -99,13 +99,17 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/app/src/main/java/com/example/letschat/ProfileActivity.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="570">
-              <caret line="138" column="75" lean-forward="true" selection-start-line="138" selection-start-column="75" selection-end-line="138" selection-end-column="75" />
+            <state relative-caret-position="-81">
+              <caret line="150" column="97" selection-start-line="150" selection-start-column="97" selection-end-line="150" selection-end-column="97" />
               <folding>
-                <element signature="e#3613#4106#0" expanded="true" />
+                <element signature="e#3777#6693#0" expanded="true" />
                 <element signature="e#4206#4464#0" expanded="true" />
                 <element signature="e#4463#4464#0" expanded="true" />
-                <element signature="e#4105#4106#0" expanded="true" />
+                <element signature="e#7313#7555#0" expanded="true" />
+                <element signature="e#7832#8154#0" expanded="true" />
+                <element signature="e#8153#8154#0" expanded="true" />
+                <element signature="e#7554#7555#0" expanded="true" />
+                <element signature="e#6692#6693#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -866,13 +870,17 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/app/src/main/java/com/example/letschat/ProfileActivity.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="570">
-          <caret line="138" column="75" lean-forward="true" selection-start-line="138" selection-start-column="75" selection-end-line="138" selection-end-column="75" />
+        <state relative-caret-position="-81">
+          <caret line="150" column="97" selection-start-line="150" selection-start-column="97" selection-end-line="150" selection-end-column="97" />
           <folding>
-            <element signature="e#3613#4106#0" expanded="true" />
+            <element signature="e#3777#6693#0" expanded="true" />
             <element signature="e#4206#4464#0" expanded="true" />
             <element signature="e#4463#4464#0" expanded="true" />
-            <element signature="e#4105#4106#0" expanded="true" />
+            <element signature="e#7313#7555#0" expanded="true" />
+            <element signature="e#7832#8154#0" expanded="true" />
+            <element signature="e#8153#8154#0" expanded="true" />
+            <element signature="e#7554#7555#0" expanded="true" />
+            <element signature="e#6692#6693#0" expanded="true" />
           </folding>
         </state>
       </provider>

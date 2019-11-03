@@ -15,6 +15,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -98,18 +99,17 @@ public class ProfileActivity extends AppCompatActivity {
 
                 sendRequestBtn.setEnabled(false);
                 Log.d(TAG, "onClick: button disables");
-                final ProgressDialog progressDialog = new ProgressDialog(ProfileActivity.this);
-                progressDialog.setTitle("Sending Request");
-                progressDialog.setMessage("Please wait while the request is being sent");
-                progressDialog.setCanceledOnTouchOutside(false);
-                progressDialog.show();
-
 
                 //--------------------------NOT FRIENDS SECTION---------------------------------
 
                 if(profileUserState.equals("notFriends")) {
 
                     Log.d(TAG, "onClick: inside not friends");
+                    final ProgressDialog progressDialog = new ProgressDialog(ProfileActivity.this);
+                    progressDialog.setTitle("Sending Request");
+                    progressDialog.setMessage("Please wait while the request is being sent");
+                    progressDialog.setCanceledOnTouchOutside(false);
+                    progressDialog.show();
 
                     mFriendReqDatabase
                             .child(mCurrentUser.getUid())
@@ -130,6 +130,7 @@ public class ProfileActivity extends AppCompatActivity {
                                         profileUserState = "req_sent";
                                         //renamed the button to cancel the request
                                         sendRequestBtn.setText("Cancel Friend Request");
+                                        sendRequestBtn.setEnabled(true);
                                         progressDialog.dismiss();
 
                                     }
@@ -139,9 +140,45 @@ public class ProfileActivity extends AppCompatActivity {
                                                 "Unable to send request, Try Agin",
                                                 Toast.LENGTH_SHORT).show();
                                         sendRequestBtn.setEnabled(true);
-                                        profileUserState = "not_friends";
+                                        profileUserState = "notFriends";
                                         progressDialog.hide();
                                     }
+                                }
+                            });
+
+                }
+
+                //--------------------------REQUEST SENT SECTION---------------------------------
+
+                if(profileUserState.equals("req_sent")) {
+
+                    final ProgressDialog progressDialog = new ProgressDialog(ProfileActivity.this);
+                    progressDialog.setTitle("Canceling Request");
+                    progressDialog.setMessage("Please wait while the request is being canceled");
+                    progressDialog.setCanceledOnTouchOutside(false);
+                    progressDialog.show();
+
+                    mFriendReqDatabase
+                            .child(mCurrentUser.getUid())
+                            .child(UID).child("request_type")
+                            .removeValue()
+                            .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                @Override
+                                public void onSuccess(Void aVoid) {
+                                    mFriendReqDatabase
+                                            .child(UID)
+                                            .child(mCurrentUser.getUid())
+                                            .child("request_type")
+                                            .removeValue()
+                                            .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                                @Override
+                                                public void onSuccess(Void aVoid) {
+                                                    profileUserState = "notFriends";
+                                                    sendRequestBtn.setText("Send Friend Request");
+                                                    sendRequestBtn.setEnabled(true);
+                                                    progressDialog.dismiss();
+                                                }
+                                            });
                                 }
                             });
 
