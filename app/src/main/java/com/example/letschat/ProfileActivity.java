@@ -93,6 +93,7 @@ public class ProfileActivity extends AppCompatActivity {
                             if(type.equals("sent")) {
                                 sendRequestBtn.setText("cancel friend request");
                                 profileUserState = "req_sent";
+                                sendRequestBtn.setBackgroundTintList(getColorStateList(android.R.color.holo_red_dark));
                             } else if (type.equals("received")) {
                                 sendRequestBtn.setEnabled(false);
                                 sendRequestBtn.setText("Accept Friend Request");
@@ -156,6 +157,7 @@ public class ProfileActivity extends AppCompatActivity {
                                         //renamed the button to cancel the request
                                         sendRequestBtn.setText("Cancel Friend Request");
                                         sendRequestBtn.setEnabled(true);
+                                        sendRequestBtn.setBackgroundTintList(getColorStateList(android.R.color.holo_red_dark));
                                         progressDialog.dismiss();
 
                                     }
