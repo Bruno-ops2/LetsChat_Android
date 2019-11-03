@@ -27,7 +27,6 @@
       <change beforePath="$PROJECT_DIR$/.gradle/5.4.1/javaCompile/javaCompile.lock" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/5.4.1/javaCompile/javaCompile.lock" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.gradle/buildOutputCleanup/buildOutputCleanup.lock" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/buildOutputCleanup/buildOutputCleanup.lock" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/src/main/java/com/example/letschat/ProfileActivity.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/example/letschat/ProfileActivity.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/res/values/colors.xml" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/res/values/colors.xml" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -97,11 +96,11 @@
           <provider editor-type-id="android-designer2" />
         </entry>
       </file>
-      <file pinned="false" current-in-tab="false">
+      <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/app/src/main/java/com/example/letschat/ProfileActivity.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="508">
-              <caret line="353" column="33" lean-forward="true" selection-start-line="353" selection-start-column="33" selection-end-line="353" selection-end-column="33" />
+            <state relative-caret-position="451">
+              <caret line="353" column="84" lean-forward="true" selection-start-line="353" selection-start-column="84" selection-end-line="353" selection-end-column="84" />
               <folding>
                 <element signature="e#6154#7283#0" expanded="true" />
                 <element signature="e#6641#7225#0" expanded="true" />
@@ -123,19 +122,20 @@
                 <element signature="e#14104#14105#0" expanded="true" />
                 <element signature="e#13439#13440#0" expanded="true" />
                 <element signature="e#18023#18265#0" expanded="true" />
-                <element signature="e#18473#18795#0" expanded="true" />
-                <element signature="e#18794#18795#0" expanded="true" />
+                <element signature="e#18614#19246#0" expanded="true" />
+                <element signature="e#19245#19246#0" expanded="true" />
+                <element signature="e#18264#18265#0" expanded="true" />
                 <element signature="e#17464#17465#0" expanded="true" />
               </folding>
             </state>
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="true">
+      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/app/src/main/res/values/colors.xml">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="95">
-              <caret line="5" column="24" selection-start-line="5" selection-start-column="24" selection-end-line="5" selection-end-column="24" />
+            <state relative-caret-position="114">
+              <caret line="6" column="34" selection-start-line="6" selection-start-column="34" selection-end-line="6" selection-end-column="34" />
             </state>
           </provider>
         </entry>
@@ -220,8 +220,8 @@
         <option value="$PROJECT_DIR$/app/src/main/java/com/example/letschat/AllUsersRecyclerViewAdaptor.java" />
         <option value="$PROJECT_DIR$/app/src/main/java/com/example/letschat/AllUsersActivity.java" />
         <option value="$PROJECT_DIR$/app/src/main/res/layout/activity_profile.xml" />
-        <option value="$PROJECT_DIR$/app/src/main/java/com/example/letschat/ProfileActivity.java" />
         <option value="$PROJECT_DIR$/app/src/main/res/values/colors.xml" />
+        <option value="$PROJECT_DIR$/app/src/main/java/com/example/letschat/ProfileActivity.java" />
       </list>
     </option>
   </component>
@@ -882,13 +882,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/example/letschat/AllUsersActivity.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-228">
-          <caret line="41" column="13" selection-start-line="41" selection-start-column="13" selection-end-line="41" selection-end-column="13" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/app/src/main/res/layout/activity_profile.xml">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="149">
@@ -897,10 +890,24 @@
       </provider>
       <provider editor-type-id="android-designer2" />
     </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/res/values/colors.xml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="114">
+          <caret line="6" column="34" selection-start-line="6" selection-start-column="34" selection-end-line="6" selection-end-column="34" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/example/letschat/AllUsersActivity.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-228">
+          <caret line="41" column="13" selection-start-line="41" selection-start-column="13" selection-end-line="41" selection-end-column="13" />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/app/src/main/java/com/example/letschat/ProfileActivity.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="508">
-          <caret line="353" column="33" lean-forward="true" selection-start-line="353" selection-start-column="33" selection-end-line="353" selection-end-column="33" />
+        <state relative-caret-position="451">
+          <caret line="353" column="84" lean-forward="true" selection-start-line="353" selection-start-column="84" selection-end-line="353" selection-end-column="84" />
           <folding>
             <element signature="e#6154#7283#0" expanded="true" />
             <element signature="e#6641#7225#0" expanded="true" />
@@ -922,17 +929,11 @@
             <element signature="e#14104#14105#0" expanded="true" />
             <element signature="e#13439#13440#0" expanded="true" />
             <element signature="e#18023#18265#0" expanded="true" />
-            <element signature="e#18473#18795#0" expanded="true" />
-            <element signature="e#18794#18795#0" expanded="true" />
+            <element signature="e#18614#19246#0" expanded="true" />
+            <element signature="e#19245#19246#0" expanded="true" />
+            <element signature="e#18264#18265#0" expanded="true" />
             <element signature="e#17464#17465#0" expanded="true" />
           </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/res/values/colors.xml">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="95">
-          <caret line="5" column="24" selection-start-line="5" selection-start-column="24" selection-end-line="5" selection-end-column="24" />
         </state>
       </provider>
     </entry>

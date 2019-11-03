@@ -91,10 +91,10 @@ public class ProfileActivity extends AppCompatActivity {
                             if(type.equals("sent")) {
                                 sendRequestBtn.setText("cancel friend request");
                                 profileUserState = "req_sent";
-                                sendRequestBtn.setBackgroundTintList(getColorStateList(android.R.color.holo_red_dark));
+                                sendRequestBtn.setBackgroundTintList(getColorStateList(R.color.NoRed));
                             } else if (type.equals("received")) {
                                 sendRequestBtn.setText("Accept Friend Request");
-                                sendRequestBtn.setBackgroundTintList(getColorStateList(android.R.color.holo_green_dark));
+                                sendRequestBtn.setBackgroundTintList(getColorStateList(R.color.yesGreen));
                                 rejectRequestBtn.setVisibility(View.VISIBLE);
                                 profileUserState = "received";
                             }
@@ -104,7 +104,7 @@ public class ProfileActivity extends AppCompatActivity {
                                 public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                                     if(dataSnapshot.child(mCurrentUser.getUid()).hasChild(UID)) {
                                         sendRequestBtn.setText("UNFRIEND");
-                                        sendRequestBtn.setBackgroundTintList(getColorStateList(android.R.color.holo_red_dark));
+                                        sendRequestBtn.setBackgroundTintList(getColorStateList(R.color.NoRed));
                                         profileUserState = "Friends";
                                     }
 
@@ -162,6 +162,7 @@ public class ProfileActivity extends AppCompatActivity {
                                                 profileUserState = "notFriends";
                                                 sendRequestBtn.setText("Send Friend Request");
                                                 sendRequestBtn.setEnabled(true);
+                                                sendRequestBtn.setBackgroundTintList(getColorStateList(R.color.colorAccent));
                                                 rejectRequestBtn.setVisibility(View.INVISIBLE);
                                                 progressDialog.dismiss();
                                             }
@@ -211,7 +212,7 @@ public class ProfileActivity extends AppCompatActivity {
                                         //renamed the button to cancel the request
                                         sendRequestBtn.setText("Cancel Friend Request");
                                         sendRequestBtn.setEnabled(true);
-                                        sendRequestBtn.setBackgroundTintList(getColorStateList(android.R.color.holo_red_dark));
+                                        sendRequestBtn.setBackgroundTintList(getColorStateList(R.color.NoRed));
                                         progressDialog.dismiss();
 
                                     }
@@ -256,6 +257,7 @@ public class ProfileActivity extends AppCompatActivity {
                                                 public void onSuccess(Void aVoid) {
                                                     profileUserState = "notFriends";
                                                     sendRequestBtn.setText("Send Friend Request");
+                                                    sendRequestBtn.setBackgroundTintList(getColorStateList(R.color.colorAccent));
                                                     sendRequestBtn.setEnabled(true);
                                                     progressDialog.dismiss();
                                                 }
@@ -308,7 +310,7 @@ public class ProfileActivity extends AppCompatActivity {
                                                                                 public void onSuccess(Void aVoid) {
                                                                                     rejectRequestBtn.setVisibility(View.INVISIBLE);
                                                                                     sendRequestBtn.setText("UNFRIEND");
-                                                                                    sendRequestBtn.setBackgroundTintList(getColorStateList(android.R.color.holo_red_dark));
+                                                                                    sendRequestBtn.setBackgroundTintList(getColorStateList(R.color.NoRed));
                                                                                     sendRequestBtn.setEnabled(false);
                                                                                     progressDialog.dismiss();
                                                                                 }
@@ -346,9 +348,11 @@ public class ProfileActivity extends AppCompatActivity {
                                             .addOnSuccessListener(new OnSuccessListener<Void>() {
                                                 @Override
                                                 public void onSuccess(Void aVoid) {
-                                                    progressDialog.dismiss();
                                                     profileUserState = "notFriends";
                                                     sendRequestBtn.setText("Send Friend Request");
+                                                    sendRequestBtn.setBackgroundTintList(getColorStateList(R.color.colorAccent));
+                                                    sendRequestBtn.setEnabled(true);
+                                                    progressDialog.dismiss();
                                                 }
                                             });
                                 }
