@@ -37,6 +37,7 @@ public class ProfileActivity extends AppCompatActivity {
     private String UID;
     private DatabaseReference mUsersDatabase;
     private DatabaseReference mFriendReqDatabase;
+    private DatabaseReference mFriendsDatabase;
     private ProgressDialog mProgressDialog;
     private FirebaseUser mCurrentUser;
 
@@ -64,7 +65,7 @@ public class ProfileActivity extends AppCompatActivity {
 
         mUsersDatabase = FirebaseDatabase.getInstance().getReference().child("Users").child(UID);
         mFriendReqDatabase = FirebaseDatabase.getInstance().getReference().child("Friend_Request");
-        Log.d(TAG, "onCreate: " + mFriendReqDatabase.toString());
+        mFriendsDatabase = FirebaseDatabase.getInstance().getReference().child("Friends");
         mCurrentUser = FirebaseAuth.getInstance().getCurrentUser();
 
         //binding views
@@ -92,7 +93,6 @@ public class ProfileActivity extends AppCompatActivity {
                                 profileUserState = "req_sent";
                                 sendRequestBtn.setBackgroundTintList(getColorStateList(android.R.color.holo_red_dark));
                             } else if (type.equals("received")) {
-                                sendRequestBtn.setEnabled(false);
                                 sendRequestBtn.setText("Accept Friend Request");
                                 sendRequestBtn.setBackgroundTintList(getColorStateList(android.R.color.holo_green_dark));
                                 rejectRequestBtn.setVisibility(View.VISIBLE);
@@ -251,6 +251,57 @@ public class ProfileActivity extends AppCompatActivity {
                 //--------------------------REQUEST RECEIVED SECTION---------------------------------
 
                 if(profileUserState.equals("received")) {
+
+                    final ProgressDialog progressDialog = new ProgressDialog(ProfileActivity.this);
+                    progressDialog.setTitle("Accepting Request");
+                    progressDialog.setMessage("Please wait while the request is being Accepted");
+                    progressDialog.setCanceledOnTouchOutside(false);
+                    progressDialog.show();
+
+                    mFriendReqDatabase
+                            .child(mCurrentUser.getUid())
+                            .child(UID)
+                            .child("request_type")
+                            .removeValue()
+                            .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                @Override
+                                public void onSuccess(Void aVoid) {
+                                    profileUserState = "Friends";
+                                    mFriendReqDatabase
+                                            .child(UID)
+                                            .child(mCurrentUser.getUid())
+                                            .child("request_type")
+                                            .removeValue()
+                                            .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                                @Override
+                                                public void onSuccess(Void aVoid) {
+                                                    mFriendsDatabase
+                                                            .child(mCurrentUser.getUid())
+                                                            .child(UID)
+                                                            .setValue("Friends")
+                                                            .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                                                @Override
+                                                                public void onSuccess(Void aVoid) {
+                                                                    mFriendsDatabase
+                                                                            .child(UID)
+                                                                            .child(mCurrentUser.getUid())
+                                                                            .setValue("Friends")
+                                                                            .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                                                                @Override
+                                                                                public void onSuccess(Void aVoid) {
+                                                                                    rejectRequestBtn.setVisibility(View.INVISIBLE);
+                                                                                    sendRequestBtn.setText("UNFRIEND");
+                                                                                    sendRequestBtn.setBackgroundTintList(getColorStateList(android.R.color.holo_red_dark));
+                                                                                    sendRequestBtn.setEnabled(false);
+                                                                                    progressDialog.dismiss();
+                                                                                }
+                                                                            });
+                                                                }
+                                                            });
+                                                }
+                                            });
+                                }
+                            });
 
                 }
 
