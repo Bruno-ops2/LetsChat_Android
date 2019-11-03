@@ -98,6 +98,23 @@ public class ProfileActivity extends AppCompatActivity {
                                 rejectRequestBtn.setVisibility(View.VISIBLE);
                                 profileUserState = "received";
                             }
+                        } else {
+                            mFriendsDatabase.addListenerForSingleValueEvent(new ValueEventListener() {
+                                @Override
+                                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                    if(dataSnapshot.child(mCurrentUser.getUid()).hasChild(UID)) {
+                                        sendRequestBtn.setText("UNFRIEND");
+                                        sendRequestBtn.setBackgroundTintList(getColorStateList(android.R.color.holo_red_dark));
+                                        profileUserState = "Friends";
+                                    }
+
+                                }
+
+                                @Override
+                                public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                                }
+                            });
                         }
                         mProgressDialog.dismiss();
 
