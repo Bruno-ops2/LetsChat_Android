@@ -128,6 +128,8 @@ public class ProfileActivity extends AppCompatActivity {
                                                 .setValue("received");
 
                                         profileUserState = "req_sent";
+                                        //renamed the button to cancel the request
+                                        sendRequestBtn.setText("Cancel Friend Request");
                                         progressDialog.dismiss();
 
                                     }
