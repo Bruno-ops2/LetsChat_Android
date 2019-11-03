@@ -1,11 +1,9 @@
 package com.example.letschat;
 
-import androidx.annotation.ColorInt;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.ProgressDialog;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -28,10 +26,6 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.squareup.picasso.Picasso;
 
-import org.w3c.dom.Text;
-
-import java.sql.Struct;
-
 public class ProfileActivity extends AppCompatActivity {
 
     private static final String TAG = "ProfileActivity";
@@ -39,6 +33,7 @@ public class ProfileActivity extends AppCompatActivity {
     private TextView name;
     private TextView status;
     private Button sendRequestBtn;
+    private Button rejectRequestBtn;
     private String UID;
     private DatabaseReference mUsersDatabase;
     private DatabaseReference mFriendReqDatabase;
@@ -76,7 +71,9 @@ public class ProfileActivity extends AppCompatActivity {
         profileImage = findViewById(R.id.profileActivity_profile_imageview);
         name = findViewById(R.id.profileActivity_name_textview);
         status = findViewById(R.id.profileActivity_status_textview);
-        sendRequestBtn = findViewById(R.id.profileActivity_send_reques_button);
+        sendRequestBtn = findViewById(R.id.profileActivity_send_request_button);
+        rejectRequestBtn = findViewById(R.id.profileActivity_reject_request_button);
+        rejectRequestBtn.setVisibility(View.INVISIBLE);
 
         mUsersDatabase.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
@@ -98,9 +95,11 @@ public class ProfileActivity extends AppCompatActivity {
                                 sendRequestBtn.setEnabled(false);
                                 sendRequestBtn.setText("Accept Friend Request");
                                 sendRequestBtn.setBackgroundTintList(getColorStateList(android.R.color.holo_green_dark));
+                                rejectRequestBtn.setVisibility(View.VISIBLE);
+                                profileUserState = "received";
                             }
-                            mProgressDialog.dismiss();
                         }
+                        mProgressDialog.dismiss();
 
                     }
 
@@ -115,6 +114,44 @@ public class ProfileActivity extends AppCompatActivity {
             public void onCancelled(@NonNull DatabaseError databaseError) {
                 Toast.makeText(ProfileActivity.this, "Unable to fetch User Data", Toast.LENGTH_SHORT).show();
                 mProgressDialog.hide();
+
+            }
+        });
+
+        rejectRequestBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                final ProgressDialog progressDialog = new ProgressDialog(ProfileActivity.this);
+                progressDialog.setTitle("Rejecting Request");
+                progressDialog.setMessage("Please wait while the request is being rejected");
+                progressDialog.setCanceledOnTouchOutside(false);
+                progressDialog.show();
+
+                mFriendReqDatabase
+                        .child(mCurrentUser.getUid())
+                        .child(UID).child("request_type")
+                        .removeValue()
+                        .addOnSuccessListener(new OnSuccessListener<Void>() {
+                            @Override
+                            public void onSuccess(Void aVoid) {
+                                mFriendReqDatabase
+                                        .child(UID)
+                                        .child(mCurrentUser.getUid())
+                                        .child("request_type")
+                                        .removeValue()
+                                        .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                            @Override
+                                            public void onSuccess(Void aVoid) {
+                                                profileUserState = "notFriends";
+                                                sendRequestBtn.setText("Send Friend Request");
+                                                sendRequestBtn.setEnabled(true);
+                                                rejectRequestBtn.setVisibility(View.INVISIBLE);
+                                                progressDialog.dismiss();
+                                            }
+                                        });
+                            }
+                        });
+
 
             }
         });
@@ -210,6 +247,13 @@ public class ProfileActivity extends AppCompatActivity {
                             });
 
                 }
+
+                //--------------------------REQUEST RECEIVED SECTION---------------------------------
+
+                if(profileUserState.equals("received")) {
+
+                }
+
             }
         });
 
