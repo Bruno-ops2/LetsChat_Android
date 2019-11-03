@@ -1,9 +1,11 @@
 package com.example.letschat;
 
+import androidx.annotation.ColorInt;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.ProgressDialog;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -82,7 +84,30 @@ public class ProfileActivity extends AppCompatActivity {
                 name.setText(dataSnapshot.child("name").getValue().toString());
                 status.setText(dataSnapshot.child("status").getValue().toString());
                 Picasso.get().load(dataSnapshot.child("profile_image").getValue().toString()).placeholder(R.drawable.avatar).into(profileImage);
-                mProgressDialog.dismiss();
+                mFriendReqDatabase.addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                        String type;
+                        if(dataSnapshot.child(mCurrentUser.getUid()).hasChild(UID)) {
+                            type = dataSnapshot.child(mCurrentUser.getUid()).child(UID).child("request_type").getValue().toString();
+                            if(type.equals("sent")) {
+                                sendRequestBtn.setText("cancel friend request");
+                                profileUserState = "req_sent";
+                            } else if (type.equals("received")) {
+                                sendRequestBtn.setEnabled(false);
+                                sendRequestBtn.setText("Accept Friend Request");
+                                sendRequestBtn.setBackgroundTintList(getColorStateList(android.R.color.holo_green_dark));
+                            }
+                            mProgressDialog.dismiss();
+                        }
+
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                    }
+                });
             }
 
             @Override
