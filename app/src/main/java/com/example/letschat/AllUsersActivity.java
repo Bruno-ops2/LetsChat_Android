@@ -7,6 +7,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewpager.widget.PagerAdapter;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -40,12 +41,19 @@ public class AllUsersActivity extends AppCompatActivity implements AllUsersRecyc
     private ArrayList<DataSnapshot> usersDatabaseResponse;
     private AllUsersRecyclerViewAdaptor allUsersRecyclerViewAdaptor;
     private Query query;
-
+    private ProgressDialog mProgressDialog;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_all_users);
         Log.d(TAG, "OnCreate started");
+
+        //progress dialog
+        mProgressDialog = new ProgressDialog(this);
+        mProgressDialog.setTitle("Loading All Users");
+        mProgressDialog.setMessage("Please wait while we fetch all users data");
+        mProgressDialog.setCanceledOnTouchOutside(false);
+        mProgressDialog.show();
 
         usersDatabaseResponse = new ArrayList<>();
         fetchData();
@@ -76,18 +84,19 @@ public class AllUsersActivity extends AppCompatActivity implements AllUsersRecyc
                     //if the key is equal to the user itself dont add that data snapshot to the array
                     if(dataSnapshot1.getKey().equals(FirebaseAuth.getInstance().getCurrentUser().getUid()))
                         continue;
-                    
+
                     usersDatabaseResponse.add(dataSnapshot1);
                     Log.d(TAG, "Item Count : " + usersDatabaseResponse.size());
                     allUsersRecyclerViewAdaptor.notifyDataSetChanged();
                     //Log.d(TAG, usersDatabaseResponse.get(getItemCount() - 1).child("name").getValue().toString());
+                    mProgressDialog.dismiss();
                 }
 
             }
 
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
-
+                mProgressDialog.hide();
             }
         });
     }

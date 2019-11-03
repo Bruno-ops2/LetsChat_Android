@@ -3,6 +3,7 @@ package com.example.letschat;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.ProgressDialog;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Window;
@@ -30,6 +31,7 @@ public class ProfileActivity extends AppCompatActivity {
     private Button sendRequestBtn;
     private String UID;
     private DatabaseReference mDatabase;
+    private ProgressDialog mProgressDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,6 +39,13 @@ public class ProfileActivity extends AppCompatActivity {
         setContentView(R.layout.activity_profile);
         UID = getIntent().getExtras().getString("UserId");
         Log.d(TAG, "onCreate: UID : " + UID);
+
+        //progress dialog
+        mProgressDialog = new ProgressDialog(this);
+        mProgressDialog.setTitle("Loading User Data");
+        mProgressDialog.setMessage("Please wait while we load the user data");
+        mProgressDialog.setCanceledOnTouchOutside(false);
+        mProgressDialog.show();
 
         mDatabase = FirebaseDatabase.getInstance().getReference().child("Users").child(UID);
 
@@ -52,11 +61,13 @@ public class ProfileActivity extends AppCompatActivity {
                 name.setText(dataSnapshot.child("name").getValue().toString());
                 status.setText(dataSnapshot.child("status").getValue().toString());
                 Picasso.get().load(dataSnapshot.child("profile_image").getValue().toString()).placeholder(R.drawable.avatar).into(profileImage);
+                mProgressDialog.dismiss();
             }
 
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
                 Toast.makeText(ProfileActivity.this, "Unable to fetch User Data", Toast.LENGTH_SHORT).show();
+                mProgressDialog.hide();
 
             }
         });
