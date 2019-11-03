@@ -322,6 +322,39 @@ public class ProfileActivity extends AppCompatActivity {
 
                 }
 
+                //--------------------------FRIENDS SECTION---------------------------------
+
+                if(profileUserState.equals("Friends")) {
+
+                    final ProgressDialog progressDialog = new ProgressDialog(ProfileActivity.this);
+                    progressDialog.setTitle("Un-Friending");
+                    progressDialog.setMessage("Please wait while the user is being Un-Friended");
+                    progressDialog.setCanceledOnTouchOutside(false);
+                    progressDialog.show();
+
+                    mFriendsDatabase
+                            .child(mCurrentUser.getUid())
+                            .child(UID)
+                            .removeValue()
+                            .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                @Override
+                                public void onSuccess(Void aVoid) {
+                                    mFriendsDatabase
+                                            .child(UID)
+                                            .child(mCurrentUser.getUid())
+                                            .removeValue()
+                                            .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                                @Override
+                                                public void onSuccess(Void aVoid) {
+                                                    progressDialog.dismiss();
+                                                    profileUserState = "notFriends";
+                                                    sendRequestBtn.setText("Send Friend Request");
+                                                }
+                                            });
+                                }
+                            });
+                }
+
             }
         });
 
