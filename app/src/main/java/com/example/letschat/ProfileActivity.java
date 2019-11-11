@@ -26,6 +26,8 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.squareup.picasso.Picasso;
 
+import java.util.HashMap;
+
 public class ProfileActivity extends AppCompatActivity {
 
     private static final String TAG = "ProfileActivity";
@@ -38,6 +40,7 @@ public class ProfileActivity extends AppCompatActivity {
     private DatabaseReference mUsersDatabase;
     private DatabaseReference mFriendReqDatabase;
     private DatabaseReference mFriendsDatabase;
+    private DatabaseReference mNotificationDatabase;
     private ProgressDialog mProgressDialog;
     private FirebaseUser mCurrentUser;
 
@@ -66,6 +69,7 @@ public class ProfileActivity extends AppCompatActivity {
         mUsersDatabase = FirebaseDatabase.getInstance().getReference().child("Users").child(UID);
         mFriendReqDatabase = FirebaseDatabase.getInstance().getReference().child("Friend_Request");
         mFriendsDatabase = FirebaseDatabase.getInstance().getReference().child("Friends");
+        mNotificationDatabase = FirebaseDatabase.getInstance().getReference().child("notifications");
         mCurrentUser = FirebaseAuth.getInstance().getCurrentUser();
 
         //binding views
@@ -209,11 +213,27 @@ public class ProfileActivity extends AppCompatActivity {
                                                 .setValue("received");
 
                                         profileUserState = "req_sent";
-                                        //renamed the button to cancel the request
-                                        sendRequestBtn.setText("Cancel Friend Request");
-                                        sendRequestBtn.setEnabled(true);
-                                        sendRequestBtn.setBackgroundTintList(getColorStateList(R.color.NoRed));
-                                        progressDialog.dismiss();
+
+                                        //notification stuff
+                                        HashMap<String, String> notificationData = new HashMap<>();
+                                        notificationData.put("from", mCurrentUser.getUid());
+                                        notificationData.put("type", "request");
+
+                                        mNotificationDatabase
+                                                .child(UID)
+                                                .push()
+                                                .setValue(notificationData)
+                                                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                                    @Override
+                                                    public void onSuccess(Void aVoid) {
+                                                        //renamed the button to cancel the request
+                                                        sendRequestBtn.setText("Cancel Friend Request");
+                                                        sendRequestBtn.setEnabled(true);
+                                                        sendRequestBtn.setBackgroundTintList(getColorStateList(R.color.NoRed));
+
+                                                        progressDialog.dismiss();
+                                                    }
+                                                });
 
                                     }
 
