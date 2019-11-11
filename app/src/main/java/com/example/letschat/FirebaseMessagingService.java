@@ -17,10 +17,14 @@ public class FirebaseMessagingService extends com.google.firebase.messaging.Fire
         super.onMessageReceived(remoteMessage);
         createNotificationChannel();
 
+        String notificationTitle = remoteMessage.getNotification().getTitle();
+        String notificationBody = remoteMessage.getNotification().getBody();
+
+
         NotificationCompat.Builder builder = new NotificationCompat.Builder(this, "LetsChannel")
                 .setSmallIcon(R.mipmap.ic_launcher_round)
-                .setContentTitle("New Friend Request")
-                .setContentText("You've received a new Friend Request");
+                .setContentTitle(notificationTitle)
+                .setContentText(notificationBody);
 
         int notificationId = (int) System.currentTimeMillis();
 
