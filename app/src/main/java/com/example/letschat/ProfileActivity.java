@@ -5,7 +5,6 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.ProgressDialog;
-import android.content.Context;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -282,50 +281,30 @@ public class ProfileActivity extends AppCompatActivity {
                     progressDialog.setCanceledOnTouchOutside(false);
                     progressDialog.show();
 
-                    mFriendReqDatabase
-                            .child(mCurrentUser.getUid())
-                            .child(UID)
-                            .child("request_type")
-                            .removeValue()
-                            .addOnSuccessListener(new OnSuccessListener<Void>() {
-                                @Override
-                                public void onSuccess(Void aVoid) {
-                                    profileUserState = "Friends";
-                                    mFriendReqDatabase
-                                            .child(UID)
-                                            .child(mCurrentUser.getUid())
-                                            .child("request_type")
-                                            .removeValue()
-                                            .addOnSuccessListener(new OnSuccessListener<Void>() {
-                                                @Override
-                                                public void onSuccess(Void aVoid) {
-                                                    mFriendsDatabase
-                                                            .child(mCurrentUser.getUid())
-                                                            .child(UID)
-                                                            .setValue("Friends")
-                                                            .addOnSuccessListener(new OnSuccessListener<Void>() {
-                                                                @Override
-                                                                public void onSuccess(Void aVoid) {
-                                                                    mFriendsDatabase
-                                                                            .child(UID)
-                                                                            .child(mCurrentUser.getUid())
-                                                                            .setValue("Friends")
-                                                                            .addOnSuccessListener(new OnSuccessListener<Void>() {
-                                                                                @Override
-                                                                                public void onSuccess(Void aVoid) {
-                                                                                    rejectRequestBtn.setVisibility(View.INVISIBLE);
-                                                                                    sendRequestBtn.setText("UNFRIEND");
-                                                                                    sendRequestBtn.setBackgroundTintList(getColorStateList(R.color.NoRed));
-                                                                                    sendRequestBtn.setEnabled(false);
-                                                                                    progressDialog.dismiss();
-                                                                                }
-                                                                            });
-                                                                }
-                                                            });
-                                                }
-                                            });
-                                }
-                            });
+                    Map requestMap = new HashMap();
+                    requestMap.put("Friend_Request/" + mCurrentUser.getUid() + "/" + UID + "/request_type", null);
+                    requestMap.put("Friend_Request/" + UID + "/" + mCurrentUser.getUid() + "/request_type", null);
+                    requestMap.put("Friends/" + mCurrentUser.getUid() + "/" + UID, "Friends");
+                    requestMap.put("Friends/" + UID + "/" + mCurrentUser.getUid(), "Friends");
+
+                    mDatabase.updateChildren(requestMap, new DatabaseReference.CompletionListener() {
+                        @Override
+                        public void onComplete(@Nullable DatabaseError databaseError, @NonNull DatabaseReference databaseReference) {
+
+                            if(databaseError != null) {
+                                Toast.makeText(ProfileActivity.this, "Unable to Accept Request", Toast.LENGTH_SHORT).show();
+                                sendRequestBtn.setEnabled(true);
+                                progressDialog.hide();
+                            } else {
+                                rejectRequestBtn.setVisibility(View.INVISIBLE);
+                                profileUserState = "Friends";
+                                sendRequestBtn.setText("UNFRIEND");
+                                sendRequestBtn.setBackgroundTintList(getColorStateList(R.color.NoRed));
+                                sendRequestBtn.setEnabled(true);
+                                progressDialog.dismiss();
+                            }
+                        }
+                    });
 
                 }
 
@@ -339,29 +318,27 @@ public class ProfileActivity extends AppCompatActivity {
                     progressDialog.setCanceledOnTouchOutside(false);
                     progressDialog.show();
 
-                    mFriendsDatabase
-                            .child(mCurrentUser.getUid())
-                            .child(UID)
-                            .removeValue()
-                            .addOnSuccessListener(new OnSuccessListener<Void>() {
-                                @Override
-                                public void onSuccess(Void aVoid) {
-                                    mFriendsDatabase
-                                            .child(UID)
-                                            .child(mCurrentUser.getUid())
-                                            .removeValue()
-                                            .addOnSuccessListener(new OnSuccessListener<Void>() {
-                                                @Override
-                                                public void onSuccess(Void aVoid) {
-                                                    profileUserState = "notFriends";
-                                                    sendRequestBtn.setText("Send Friend Request");
-                                                    sendRequestBtn.setBackgroundTintList(getColorStateList(R.color.colorAccent));
-                                                    sendRequestBtn.setEnabled(true);
-                                                    progressDialog.dismiss();
-                                                }
-                                            });
-                                }
-                            });
+                    Map requestMap = new HashMap();
+                    requestMap.put("Friends/" + mCurrentUser.getUid() + "/" + UID, null);
+                    requestMap.put("Friends/" + UID + "/" + mCurrentUser.getUid(), null);
+
+                    mDatabase.updateChildren(requestMap, new DatabaseReference.CompletionListener() {
+                        @Override
+                        public void onComplete(@Nullable DatabaseError databaseError, @NonNull DatabaseReference databaseReference) {
+
+                            sendRequestBtn.setEnabled(true);
+
+                            if(databaseError != null) {
+                                Toast.makeText(ProfileActivity.this, "Unable to Unfriend, please try again", Toast.LENGTH_SHORT).show();
+                                progressDialog.hide();
+                            } else {
+                                profileUserState = "notFriends";
+                                sendRequestBtn.setText("Send Friend Request");
+                                sendRequestBtn.setBackgroundTintList(getColorStateList(R.color.colorAccent));
+                                progressDialog.dismiss();
+                            }
+                        }
+                    });
                 }
 
             }

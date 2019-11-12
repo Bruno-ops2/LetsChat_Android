@@ -36,7 +36,7 @@
   <component name="DefaultGradleProjectSettings">
     <option name="isMigrated" value="true" />
   </component>
-  <component name="ExecutionTargetManager" SELECTED_TARGET="Pixel_2_API_29" />
+  <component name="ExecutionTargetManager" SELECTED_TARGET="Nexus_5X_API_29" />
   <component name="ExternalProjectsManager">
     <system id="GRADLE">
       <state>
@@ -68,8 +68,8 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/app/src/main/java/com/example/letschat/ProfileActivity.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="306">
-              <caret line="250" column="105" selection-start-line="250" selection-start-column="105" selection-end-line="250" selection-end-column="105" />
+            <state relative-caret-position="6441">
+              <caret line="370" lean-forward="true" selection-start-line="370" selection-end-line="370" />
               <folding>
                 <element signature="imports" expanded="true" />
                 <element signature="e#8740#21149#0" expanded="true" />
@@ -77,7 +77,11 @@
                 <element signature="e#11574#11575#0" expanded="true" />
                 <element signature="e#12476#13473#0" expanded="true" />
                 <element signature="e#13472#13473#0" expanded="true" />
-                <element signature="e#13397#14966#0" />
+                <element signature="e#14585#14874#0" expanded="true" />
+                <element signature="e#14873#14874#0" expanded="true" />
+                <element signature="e#16488#16777#0" expanded="true" />
+                <element signature="e#16776#16777#0" expanded="true" />
+                <element signature="e#17510#18986#0" />
                 <element signature="e#21148#21149#0" expanded="true" />
               </folding>
             </state>
@@ -462,7 +466,7 @@
     </todo-panel>
   </component>
   <component name="ToolWindowManager">
-    <frame x="0" y="-1" width="1920" height="1081" extended-state="7" />
+    <frame x="0" y="-1" width="1920" height="1081" extended-state="6" />
     <editor active="true" />
     <layout>
       <window_info id="Captures" order="0" side_tool="true" weight="0.25" />
@@ -842,8 +846,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/app/src/main/java/com/example/letschat/ProfileActivity.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="306">
-          <caret line="250" column="105" selection-start-line="250" selection-start-column="105" selection-end-line="250" selection-end-column="105" />
+        <state relative-caret-position="6441">
+          <caret line="370" lean-forward="true" selection-start-line="370" selection-end-line="370" />
           <folding>
             <element signature="imports" expanded="true" />
             <element signature="e#8740#21149#0" expanded="true" />
@@ -851,7 +855,11 @@
             <element signature="e#11574#11575#0" expanded="true" />
             <element signature="e#12476#13473#0" expanded="true" />
             <element signature="e#13472#13473#0" expanded="true" />
-            <element signature="e#13397#14966#0" />
+            <element signature="e#14585#14874#0" expanded="true" />
+            <element signature="e#14873#14874#0" expanded="true" />
+            <element signature="e#16488#16777#0" expanded="true" />
+            <element signature="e#16776#16777#0" expanded="true" />
+            <element signature="e#17510#18986#0" />
             <element signature="e#21148#21149#0" expanded="true" />
           </folding>
         </state>
