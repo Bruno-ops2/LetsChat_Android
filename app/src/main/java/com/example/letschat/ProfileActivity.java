@@ -1,6 +1,7 @@
 package com.example.letschat;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.ProgressDialog;
@@ -14,9 +15,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -27,6 +26,7 @@ import com.google.firebase.database.ValueEventListener;
 import com.squareup.picasso.Picasso;
 
 import java.util.HashMap;
+import java.util.Map;
 
 public class ProfileActivity extends AppCompatActivity {
 
@@ -37,6 +37,7 @@ public class ProfileActivity extends AppCompatActivity {
     private Button sendRequestBtn;
     private Button rejectRequestBtn;
     private String UID;
+    private DatabaseReference mDatabase;
     private DatabaseReference mUsersDatabase;
     private DatabaseReference mFriendReqDatabase;
     private DatabaseReference mFriendsDatabase;
@@ -66,6 +67,7 @@ public class ProfileActivity extends AppCompatActivity {
         mProgressDialog.setCanceledOnTouchOutside(false);
         mProgressDialog.show();
 
+        mDatabase = FirebaseDatabase.getInstance().getReference();
         mUsersDatabase = FirebaseDatabase.getInstance().getReference().child("Users").child(UID);
         mFriendReqDatabase = FirebaseDatabase.getInstance().getReference().child("Friend_Request");
         mFriendsDatabase = FirebaseDatabase.getInstance().getReference().child("Friends");
@@ -196,57 +198,40 @@ public class ProfileActivity extends AppCompatActivity {
                     progressDialog.setCanceledOnTouchOutside(false);
                     progressDialog.show();
 
-                    mFriendReqDatabase
-                            .child(mCurrentUser.getUid())
-                            .child(UID)
-                            .child("request_type")
-                            .setValue("sent")
-                            .addOnCompleteListener(new OnCompleteListener<Void>() {
-                                @Override
-                                public void onComplete(@NonNull Task<Void> task) {
+                    HashMap<String, String> notificationData = new HashMap<>();
+                    notificationData.put("from", mCurrentUser.getUid());
+                    notificationData.put("type", "request");
 
-                                    if(task.isSuccessful()) {
-                                        mFriendReqDatabase
-                                                .child(UID)
-                                                .child(mCurrentUser.getUid())
-                                                .child("request_type")
-                                                .setValue("received");
+                    DatabaseReference mNotificationDatabase = mDatabase.child("notifications").push();
+                    String newNotificationID = mNotificationDatabase.getKey();
 
-                                        profileUserState = "req_sent";
+                    Map requestMap = new HashMap();
+                    requestMap.put("Friend_Request/" + mCurrentUser.getUid() + "/" + UID + "/request_type", "sent");
+                    requestMap.put("Friend_Request/" + UID + "/" + mCurrentUser.getUid() + "/request_type", "received");
+                    requestMap.put("notifications/" + UID + "/" + newNotificationID + "/from", mCurrentUser.getUid());
+                    requestMap.put("notifications/" + UID + "/" + newNotificationID + "/type", "request");
 
-                                        //notification stuff
-                                        HashMap<String, String> notificationData = new HashMap<>();
-                                        notificationData.put("from", mCurrentUser.getUid());
-                                        notificationData.put("type", "request");
+                    mDatabase.updateChildren(requestMap, new DatabaseReference.CompletionListener() {
+                        @Override
+                        public void onComplete(@Nullable DatabaseError databaseError, @NonNull DatabaseReference databaseReference) {
 
-                                        mNotificationDatabase
-                                                .child(UID)
-                                                .push()
-                                                .setValue(notificationData)
-                                                .addOnSuccessListener(new OnSuccessListener<Void>() {
-                                                    @Override
-                                                    public void onSuccess(Void aVoid) {
-                                                        //renamed the button to cancel the request
-                                                        sendRequestBtn.setText("Cancel Friend Request");
-                                                        sendRequestBtn.setEnabled(true);
-                                                        sendRequestBtn.setBackgroundTintList(getColorStateList(R.color.NoRed));
+                            sendRequestBtn.setEnabled(true);
 
-                                                        progressDialog.dismiss();
-                                                    }
-                                                });
+                            if(databaseError != null) {
+                                Toast.makeText(ProfileActivity.this, "Unable to send request", Toast.LENGTH_SHORT).show();
+                                profileUserState = "notFriends";
+                                progressDialog.hide();
+                            }
 
-                                    }
+                            //renamed the button to cancel the request
+                            sendRequestBtn.setText("Cancel Friend Request");
+                            sendRequestBtn.setBackgroundTintList(getColorStateList(R.color.NoRed));
+                            progressDialog.dismiss();
+                        }
+                    });
 
-                                    if (!task.isSuccessful()) {
-                                        Toast.makeText(ProfileActivity.this,
-                                                "Unable to send request, Try Agin",
-                                                Toast.LENGTH_SHORT).show();
-                                        sendRequestBtn.setEnabled(true);
-                                        profileUserState = "notFriends";
-                                        progressDialog.hide();
-                                    }
-                                }
-                            });
+
+
 
                 }
 
