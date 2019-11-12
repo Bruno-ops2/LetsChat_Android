@@ -82,13 +82,13 @@ public class ProfileActivity extends AppCompatActivity {
         rejectRequestBtn = findViewById(R.id.profileActivity_reject_request_button);
         rejectRequestBtn.setVisibility(View.INVISIBLE);
 
-        mUsersDatabase.addListenerForSingleValueEvent(new ValueEventListener() {
+        mUsersDatabase.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 name.setText(dataSnapshot.child("name").getValue().toString());
                 status.setText(dataSnapshot.child("status").getValue().toString());
                 Picasso.get().load(dataSnapshot.child("profile_image").getValue().toString()).placeholder(R.drawable.avatar).into(profileImage);
-                mFriendReqDatabase.addListenerForSingleValueEvent(new ValueEventListener() {
+                mFriendReqDatabase.addValueEventListener(new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                         String type;
@@ -105,13 +105,17 @@ public class ProfileActivity extends AppCompatActivity {
                                 profileUserState = "received";
                             }
                         } else {
-                            mFriendsDatabase.addListenerForSingleValueEvent(new ValueEventListener() {
+                            mFriendsDatabase.addValueEventListener(new ValueEventListener() {
                                 @Override
                                 public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                                     if(dataSnapshot.child(mCurrentUser.getUid()).hasChild(UID)) {
                                         sendRequestBtn.setText("UNFRIEND");
                                         sendRequestBtn.setBackgroundTintList(getColorStateList(R.color.NoRed));
                                         profileUserState = "Friends";
+                                    } else {
+                                        sendRequestBtn.setText("Send Friend Request");
+                                        sendRequestBtn.setBackgroundTintList(getColorStateList(R.color.colorAccent));
+                                        profileUserState = "notFriends";
                                     }
 
                                 }
