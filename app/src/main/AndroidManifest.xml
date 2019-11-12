@@ -17,6 +17,11 @@
         <activity
             android:name=".ProfileActivity"
             android:parentActivityName=".AllUsersActivity">
+            <intent-filter>
+                <action android:name="com.example.letschat_TARGET_NOTIFICATION"/>
+                <category android:name="android.intent.category.DEFAULT"/>
+
+            </intent-filter>
         </activity>
         <activity
             android:name=".AllUsersActivity"

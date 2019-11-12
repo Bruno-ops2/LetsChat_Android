@@ -35,7 +35,11 @@ exports.sendNotification = functions.database.ref('/notifications/{user_id}/{not
                     notification: {
                         title: "Friend Request",
                         body: `${userName} has sent you Friend Request`,
-                        icon: "default"
+                        icon: "default",
+                        click_action: "com.example.letschat_TARGET_NOTIFICATION"
+                    },
+                    data : {
+                        from_user_id : from_user_id
                     }
                 };
                 return admin.messaging().sendToDevice(token_id,payload).then(response => {
