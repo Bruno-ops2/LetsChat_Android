@@ -18,14 +18,8 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="ea38a592-5bd6-47cf-9702-233106ad4ba3" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.gradle/5.4.1/executionHistory/executionHistory.bin" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/5.4.1/executionHistory/executionHistory.bin" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.gradle/5.4.1/executionHistory/executionHistory.lock" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/5.4.1/executionHistory/executionHistory.lock" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gradle/5.4.1/fileHashes/fileHashes.bin" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/5.4.1/fileHashes/fileHashes.bin" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gradle/5.4.1/fileHashes/fileHashes.lock" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/5.4.1/fileHashes/fileHashes.lock" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gradle/5.4.1/javaCompile/classAnalysis.bin" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/5.4.1/javaCompile/classAnalysis.bin" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gradle/5.4.1/javaCompile/javaCompile.lock" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/5.4.1/javaCompile/javaCompile.lock" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gradle/buildOutputCleanup/buildOutputCleanup.lock" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/buildOutputCleanup/buildOutputCleanup.lock" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/example/letschat/ProfileActivity.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/example/letschat/ProfileActivity.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/firebaseNotificationFunction/functions/index.js" beforeDir="false" afterPath="$PROJECT_DIR$/firebaseNotificationFunction/functions/index.js" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -68,8 +62,8 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/app/src/main/java/com/example/letschat/ProfileActivity.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="641">
-              <caret line="117" column="72" selection-start-line="117" selection-start-column="72" selection-end-line="117" selection-end-column="72" />
+            <state relative-caret-position="2736">
+              <caret line="170" column="60" selection-start-line="170" selection-start-column="60" selection-end-line="170" selection-end-column="60" />
               <folding>
                 <element signature="e#6598#9990#0" expanded="true" />
                 <element signature="e#7407#7676#0" expanded="true" />
@@ -94,7 +88,7 @@
         <entry file="file://$PROJECT_DIR$/app/src/main/java/com/example/letschat/RegisterActivity.java">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="413">
-              <caret line="85" column="81" lean-forward="true" selection-start-line="85" selection-start-column="81" selection-end-line="85" selection-end-column="81" />
+              <caret line="85" column="81" selection-start-line="85" selection-start-column="81" selection-end-line="85" selection-end-column="81" />
             </state>
           </provider>
         </entry>
@@ -832,7 +826,7 @@
     <entry file="file://$PROJECT_DIR$/app/src/main/java/com/example/letschat/RegisterActivity.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="413">
-          <caret line="85" column="81" lean-forward="true" selection-start-line="85" selection-start-column="81" selection-end-line="85" selection-end-column="81" />
+          <caret line="85" column="81" selection-start-line="85" selection-start-column="81" selection-end-line="85" selection-end-column="81" />
         </state>
       </provider>
     </entry>
@@ -848,8 +842,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/app/src/main/java/com/example/letschat/ProfileActivity.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="641">
-          <caret line="117" column="72" selection-start-line="117" selection-start-column="72" selection-end-line="117" selection-end-column="72" />
+        <state relative-caret-position="2736">
+          <caret line="170" column="60" selection-start-line="170" selection-start-column="60" selection-end-line="170" selection-end-column="60" />
           <folding>
             <element signature="e#6598#9990#0" expanded="true" />
             <element signature="e#7407#7676#0" expanded="true" />
