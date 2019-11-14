@@ -21,11 +21,15 @@ class FriendsFragment(val friendsDatabaseResponse : ArrayList<Friends>) : Fragme
 
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+        Log.d(TAG, "onCreateView started")
         return inflater.inflate(R.layout.fragment_friends, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        /*Log.d(TAG, "onViewCreated started")
+        fetchData()*/
 
         friendsRecyclerView.apply {
 
@@ -33,21 +37,29 @@ class FriendsFragment(val friendsDatabaseResponse : ArrayList<Friends>) : Fragme
 
             this.adapter = adaptor
         }
+
+
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        adaptor = FriendsRecyclerViewAdaptor(friendsDatabaseResponse, context ?: throw NullPointerException())
+        Log.d(TAG, "onCreate started")
+        Log.d(TAG, "fetching data")
         fetchData()
+        adaptor = FriendsRecyclerViewAdaptor(friendsDatabaseResponse, context ?: throw NullPointerException())
         retainInstance = true
     }
 
     private fun fetchData() {
+        Log.d(TAG, "starting to fetch")
         var query : Query = FirebaseDatabase.getInstance().reference.child("Friends").child(currentUser?.uid ?: throw NullPointerException())
         query.addValueEventListener(object : ValueEventListener {
             override fun onDataChange(dataSnapshot: DataSnapshot) {
+                Log.d(TAG, "fetch data query listener started")
                 val children = dataSnapshot.children
+                Log.d(TAG, "listener : ${children.toString()}")
                 children.forEach {
+                    Log.d(TAG, "for each : $it")
                     var userQuery : Query = FirebaseDatabase.getInstance().reference.child("Users").child(it.key ?: throw NullPointerException())
                     Log.d(TAG, it.toString())
                     userQuery.addValueEventListener(object : ValueEventListener {
@@ -57,15 +69,17 @@ class FriendsFragment(val friendsDatabaseResponse : ArrayList<Friends>) : Fragme
 
                         override fun onDataChange(dataSnapshot: DataSnapshot) {
                             var friend = Friends(dataSnapshot.child("name").value.toString(),
-                                                null,
+                                                dataSnapshot.child("lastSeen").value.toString(),
                                                 dataSnapshot.child("thumbnail_image").value.toString()
                                                 )
+                            Log.d(TAG, "friend added : $friend")
                             friendsDatabaseResponse.add(friend)
+                            adaptor.notifyDataSetChanged()
+
                             Log.d(TAG, "Item count : ${friendsDatabaseResponse.size}")
                         }
                     })
                 }
-                adaptor.notifyDataSetChanged()
             }
 
             override fun onCancelled(databaseError: DatabaseError) {
