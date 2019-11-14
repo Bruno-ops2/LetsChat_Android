@@ -68,12 +68,18 @@ class FriendsFragment(val friendsDatabaseResponse : ArrayList<Friends>) : Fragme
                         }
 
                         override fun onDataChange(dataSnapshot: DataSnapshot) {
-                            var friend = Friends(dataSnapshot.child("name").value.toString(),
+                            var friend = Friends(it.key.toString(),
+                                                dataSnapshot.child("name").value.toString(),
                                                 dataSnapshot.child("lastSeen").value.toString(),
                                                 dataSnapshot.child("thumbnail_image").value.toString()
                                                 )
                             Log.d(TAG, "friend added : $friend")
-                            friendsDatabaseResponse.add(friend)
+                            if(!friendsDatabaseResponse.contains(friend))
+                                friendsDatabaseResponse.add(friend)
+                            else {
+                                var index = friendsDatabaseResponse.indexOf(friend)
+                                friendsDatabaseResponse[index] = friend
+                            }
                             adaptor.notifyDataSetChanged()
 
                             Log.d(TAG, "Item count : ${friendsDatabaseResponse.size}")
