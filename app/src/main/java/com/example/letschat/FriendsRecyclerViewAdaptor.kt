@@ -17,11 +17,10 @@ class FriendsRecyclerViewAdaptor(
     ) : RecyclerView.Adapter<FriendsRecyclerViewAdaptor.ViewHolder>() {
 
     val TAG: String = "FriendsAdaptor"
-
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-        Log.d(TAG, "onCreateViewHolder called")
-        return ViewHolder(LayoutInflater.from(mContext).inflate(R.layout.single_friend, parent, false))
-    }
+    
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) = ViewHolder (
+            LayoutInflater.from(mContext).inflate(R.layout.single_friend, parent, false)
+    ).also { Log.d(TAG, "onCreateViewHolder called") }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         Log.d(TAG, "onBindViewHolder called")
