@@ -8,6 +8,10 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentPagerAdapter;
 
+import com.google.firebase.database.DataSnapshot;
+
+import java.util.ArrayList;
+
 public class TabsAdaptor extends FragmentPagerAdapter {
 
     public TabsAdaptor(@NonNull FragmentManager fm) {
@@ -27,7 +31,7 @@ public class TabsAdaptor extends FragmentPagerAdapter {
                 return chatsFragment;
 
             case 2:
-                FriendsFragment friendsFragment = new FriendsFragment();
+                FriendsFragment friendsFragment = new FriendsFragment(new ArrayList<Friends>());
                 return friendsFragment;
 
             default:
