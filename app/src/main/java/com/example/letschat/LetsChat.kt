@@ -14,7 +14,10 @@ import java.lang.NullPointerException
 import java.lang.ref.WeakReference
 import java.util.concurrent.atomic.AtomicBoolean
 import androidx.core.os.HandlerCompat.postDelayed
-
+import androidx.core.content.ContextCompat.getSystemService
+import android.icu.lang.UCharacter.GraphemeClusterBreak.T
+import android.icu.text.SimpleDateFormat
+import android.icu.util.Calendar
 
 
 class LetsChat : Application(), Application.ActivityLifecycleCallbacks {
@@ -52,6 +55,16 @@ class LetsChat : Application(), Application.ActivityLifecycleCallbacks {
 
     }
 
+    fun getDate(milliSeconds: Long, dateFormat: String): String {
+        // Create a DateFormatter object for displaying date in specified format.
+        val formatter = java.text.SimpleDateFormat(dateFormat)
+
+        // Create a calendar object that will convert the date and time value in milliseconds to date.
+        val calendar = java.util.Calendar.getInstance()
+        calendar.setTimeInMillis(milliSeconds)
+        return formatter.format(calendar.getTime())
+    }
+
     fun onEnterForeground() {
         //This is where you'll handle logic you want to execute when your application enters the foreground
         Log.d(this.javaClass.name, "activity is in foreground" )
@@ -64,7 +77,7 @@ class LetsChat : Application(), Application.ActivityLifecycleCallbacks {
         //This is where you'll handle logic you want to execute when your application enters the background
         Log.d(this.javaClass.name, "activity is in background" )
         if(mUserDatabase != null)
-            mUserDatabase?.child("lastSeen")?.setValue("false")
+            mUserDatabase?.child("lastSeen")?.setValue(getDate(System.currentTimeMillis(), "dd/MM/yyyy hh.mm aa"))
 
     }
 

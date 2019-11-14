@@ -31,14 +31,14 @@ class FriendsRecyclerViewAdaptor(
         Log.d(TAG, "onBindViewHolder called")
         val name = friendsDatabaseResponse[position].name
         val profileImage = friendsDatabaseResponse[position].profileImage
-        var lastSeen = friendsDatabaseResponse[position].lastSeen
+        var lastSeen = friendsDatabaseResponse[position].lastSeen.toString()
         Log.d(TAG, "view holder name ; $name")
         Log.d(TAG, "view holder name ; $profileImage")
 
         holder.name.text = name
         when(lastSeen) {
             "true" -> holder.lastSeen.text = "Online"
-            "false" -> holder.lastSeen.text = "Offline"
+            else -> holder.lastSeen.text = lastSeen
         }
         Picasso.get().load(profileImage).placeholder(R.drawable.avatar).into(holder.profileImage)
     }
