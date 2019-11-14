@@ -37,6 +37,7 @@ import java.util.concurrent.RecursiveAction;
 public class AllUsersActivity extends AppCompatActivity implements AllUsersRecyclerViewAdaptor.OnItemClick {
 
     private Toolbar mToolbar;
+    private boolean done = false;
     private static String TAG = "AllUsersActivity";
     private ArrayList<DataSnapshot> usersDatabaseResponse;
     private AllUsersRecyclerViewAdaptor allUsersRecyclerViewAdaptor;
@@ -56,6 +57,7 @@ public class AllUsersActivity extends AppCompatActivity implements AllUsersRecyc
         mProgressDialog.show();
 
         usersDatabaseResponse = new ArrayList<>();
+        Log.d(TAG, "onCreate: current size of arrayList" + usersDatabaseResponse.size());
         fetchData();
 
         //toolbar
@@ -77,6 +79,9 @@ public class AllUsersActivity extends AppCompatActivity implements AllUsersRecyc
         query.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                Log.d(TAG, "onData started: " + done);
+                if(done)
+                    return;
                 for (DataSnapshot dataSnapshot1 : dataSnapshot.getChildren()) {
                     Log.d(TAG, dataSnapshot1.toString());
                     Log.d(TAG, "onDataChange: user key : " + dataSnapshot1.getKey().toString());
@@ -88,6 +93,8 @@ public class AllUsersActivity extends AppCompatActivity implements AllUsersRecyc
                     usersDatabaseResponse.add(dataSnapshot1);
                     Log.d(TAG, "Item Count : " + usersDatabaseResponse.size());
                     allUsersRecyclerViewAdaptor.notifyDataSetChanged();
+                    done = true;
+                    Log.d(TAG, "onDataChange: " + done);
                     //Log.d(TAG, usersDatabaseResponse.get(getItemCount() - 1).child("name").getValue().toString());
                     mProgressDialog.dismiss();
                 }
