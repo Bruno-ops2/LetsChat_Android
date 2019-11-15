@@ -15,13 +15,14 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+        <activity android:name=".ChatActivity"></activity>
         <activity
             android:name=".ProfileActivity"
             android:parentActivityName=".AllUsersActivity">
             <intent-filter>
-                <action android:name="com.example.letschat_TARGET_NOTIFICATION"/>
-                <category android:name="android.intent.category.DEFAULT"/>
+                <action android:name="com.example.letschat_TARGET_NOTIFICATION" />
 
+                <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
         <activity
@@ -48,6 +49,7 @@
             </intent-filter>
         </activity>
         <activity android:name=".StartActivity" />
+
         <service
             android:name=".FirebaseMessagingService"
             android:exported="false">

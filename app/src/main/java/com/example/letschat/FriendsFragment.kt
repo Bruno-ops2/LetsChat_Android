@@ -111,23 +111,19 @@ class FriendsFragment(val friendsDatabaseResponse : ArrayList<Friends>) : Fragme
         builder.setItems(options) { dialogInterface, i ->
             //Click Event for each item.
             if (i == 0) {
-
                 val profileIntent = Intent(activity, ProfileActivity::class.java).apply {
                     putExtra("UserId", friend.uid)
                 }
-                Log.d(TAG, "UserID : ${friend.uid}")
+                Log.d(TAG, "UserId : ${friend.uid}")
                 startActivity(profileIntent)
-
             }
-
-            /*if (i == 1) {
-
-                val chatIntent = Intent(context, ChatActivity::class.java)
-                chatIntent.putExtra("user_id", list_user_id)
-                chatIntent.putExtra("user_name", userName)
+            if (i == 1) {
+                val chatIntent = Intent(activity, ChatActivity::class.java)
+                chatIntent.putExtra("UserId", friend.uid)
+                chatIntent.putExtra("UserName", friend.name)
+                Log.d(TAG, "UserId : ${friend.uid}, UserName : ${friend.uid}")
                 startActivity(chatIntent)
-
-            }*/
+            }
         }
 
         builder.show()
