@@ -51,8 +51,8 @@ public class ProfileActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile);
-        UID = getIntent().getExtras().getString("UserId");
-        Log.d(TAG, "onCreate: UID : " + UID);
+        UID = getIntent().getStringExtra("UserId");
+        Log.d(TAG, "onCreate: UID : " + UID + " OnCreate: intent:" + getIntent().toString());
 
         //making status bar trasparent
         Window w = getWindow();

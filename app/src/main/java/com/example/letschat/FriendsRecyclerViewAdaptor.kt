@@ -42,7 +42,7 @@ class FriendsRecyclerViewAdaptor(
             else -> holder.lastSeen.text = lastSeen
         }
         Picasso.get().load(profileImage).placeholder(R.drawable.avatar).into(holder.profileImage)
-        holder.profileImage.rootView.setOnClickListener { onClick.onItemClick(position) }
+        holder.profileImage.rootView.setOnClickListener { onClick.onItemClick(position, friendsDatabaseResponse[position]) }
     }
 
     override fun getItemCount(): Int {
@@ -58,7 +58,7 @@ class FriendsRecyclerViewAdaptor(
     }
 
     interface OnItemClick {
-        fun onItemClick(position : Int)
+        fun onItemClick(position : Int, friend : Friends)
     }
 
     fun setonClick (onClick : OnItemClick){

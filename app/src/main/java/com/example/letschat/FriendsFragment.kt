@@ -16,6 +16,9 @@ import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.database.*
 import kotlinx.android.synthetic.main.fragment_friends.*
 import java.lang.NullPointerException
+import android.content.Intent
+
+
 
 class FriendsFragment(val friendsDatabaseResponse : ArrayList<Friends>) : Fragment(), FriendsRecyclerViewAdaptor.OnItemClick {
 
@@ -99,15 +102,33 @@ class FriendsFragment(val friendsDatabaseResponse : ArrayList<Friends>) : Fragme
         })
     }
 
-    override fun onItemClick(position: Int) {
+    override fun onItemClick(position: Int, friend: Friends) {
 
         Log.d(TAG, "onItemClick called")
         val options = arrayOf<CharSequence>("Open profile", "Send Message")
         var builder : AlertDialog.Builder = AlertDialog.Builder(context ?: throw NullPointerException())
         builder.setTitle("Select Options")
-        builder.setItems(options, DialogInterface.OnClickListener { dialogInterface, i ->
+        builder.setItems(options) { dialogInterface, i ->
+            //Click Event for each item.
+            if (i == 0) {
 
-        })
+                val profileIntent = Intent(activity, ProfileActivity::class.java).apply {
+                    putExtra("UserId", friend.uid)
+                }
+                Log.d(TAG, "UserID : ${friend.uid}")
+                startActivity(profileIntent)
+
+            }
+
+            /*if (i == 1) {
+
+                val chatIntent = Intent(context, ChatActivity::class.java)
+                chatIntent.putExtra("user_id", list_user_id)
+                chatIntent.putExtra("user_name", userName)
+                startActivity(chatIntent)
+
+            }*/
+        }
 
         builder.show()
 
