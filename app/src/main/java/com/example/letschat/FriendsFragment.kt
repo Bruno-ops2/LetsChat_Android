@@ -121,6 +121,7 @@ class FriendsFragment(val friendsDatabaseResponse : ArrayList<Friends>) : Fragme
                 val chatIntent = Intent(activity, ChatActivity::class.java)
                 chatIntent.putExtra("UserId", friend.uid)
                 chatIntent.putExtra("UserName", friend.name)
+                chatIntent.putExtra("UserLastSeen", friend.lastSeen)
                 Log.d(TAG, "UserId : ${friend.uid}, UserName : ${friend.uid}")
                 startActivity(chatIntent)
             }
