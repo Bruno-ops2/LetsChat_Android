@@ -16,7 +16,8 @@ class FriendsRecyclerViewAdaptor(
         val mContext: Context
     ) : RecyclerView.Adapter<FriendsRecyclerViewAdaptor.ViewHolder>() {
 
-    val TAG: String = "FriendsAdaptor"
+    private val TAG: String = "FriendsAdaptor"
+    private lateinit var onClick : OnItemClick
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         Log.d(TAG, "onCreateViewHolder called")
@@ -41,6 +42,7 @@ class FriendsRecyclerViewAdaptor(
             else -> holder.lastSeen.text = lastSeen
         }
         Picasso.get().load(profileImage).placeholder(R.drawable.avatar).into(holder.profileImage)
+        holder.profileImage.rootView.setOnClickListener { onClick.onItemClick(position) }
     }
 
     override fun getItemCount(): Int {
@@ -53,5 +55,13 @@ class FriendsRecyclerViewAdaptor(
         val lastSeen: TextView = view.findViewById(R.id.single_friend_lastSeen);
         val profileImage: CircleImageView = view.findViewById(R.id.single_friend_profileImage);
 
+    }
+
+    interface OnItemClick {
+        fun onItemClick(position : Int)
+    }
+
+    fun setonClick (onClick : OnItemClick){
+        this.onClick = onClick
     }
 }

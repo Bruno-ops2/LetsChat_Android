@@ -1,19 +1,23 @@
 package com.example.letschat
 
+import android.content.DialogInterface
+import androidx.appcompat.app.*
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
+import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.database.*
 import kotlinx.android.synthetic.main.fragment_friends.*
 import java.lang.NullPointerException
 
-class FriendsFragment(val friendsDatabaseResponse : ArrayList<Friends>) : Fragment() {
+class FriendsFragment(val friendsDatabaseResponse : ArrayList<Friends>) : Fragment(), FriendsRecyclerViewAdaptor.OnItemClick {
 
     private var currentUser : FirebaseUser? = FirebaseAuth.getInstance().currentUser
     private val TAG : String = "FriendsFragment"
@@ -47,6 +51,7 @@ class FriendsFragment(val friendsDatabaseResponse : ArrayList<Friends>) : Fragme
         Log.d(TAG, "fetching data")
         fetchData()
         adaptor = FriendsRecyclerViewAdaptor(friendsDatabaseResponse, context ?: throw NullPointerException())
+        adaptor.setonClick(this)
         retainInstance = true
     }
 
@@ -92,5 +97,19 @@ class FriendsFragment(val friendsDatabaseResponse : ArrayList<Friends>) : Fragme
                 TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
             }
         })
+    }
+
+    override fun onItemClick(position: Int) {
+
+        Log.d(TAG, "onItemClick called")
+        val options = arrayOf<CharSequence>("Open profile", "Send Message")
+        var builder : AlertDialog.Builder = AlertDialog.Builder(context ?: throw NullPointerException())
+        builder.setTitle("Select Options")
+        builder.setItems(options, DialogInterface.OnClickListener { dialogInterface, i ->
+
+        })
+
+        builder.show()
+
     }
 }
