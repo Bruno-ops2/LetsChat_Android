@@ -1,13 +1,17 @@
 package com.example.letschat;
 
+import androidx.annotation.Nullable;
+
 public class Users {
 
     private String name;
+    private String uid;
     private String profile_image;
     private String status;
 
-    public Users(String name, String profile_image, String status) {
+    public Users(String uid, String name, String profile_image, String status) {
         this.name = name;
+        this.uid = uid;
         this.profile_image = profile_image;
         this.status = status;
     }
@@ -42,4 +46,13 @@ public class Users {
         this.profile_image = profile_image;
     }
 
+    @Override
+    public boolean equals(@Nullable Object obj) {
+        if(obj instanceof Users) {
+            if(((Users)obj).uid.equals(this.uid))
+                return true;
+        }
+
+        return false;
+    }
 }

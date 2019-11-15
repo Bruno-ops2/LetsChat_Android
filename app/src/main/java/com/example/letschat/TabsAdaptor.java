@@ -23,7 +23,7 @@ public class TabsAdaptor extends FragmentPagerAdapter {
     public Fragment getItem(int position) {
         switch (position) {
             case 0:
-                RequestsFragment requestsFragment = new RequestsFragment();
+                RequestsFragment requestsFragment = new RequestsFragment(new ArrayList<Users>());
                 return requestsFragment;
 
             case 1:
