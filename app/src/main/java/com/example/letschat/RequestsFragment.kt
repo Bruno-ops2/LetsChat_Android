@@ -1,6 +1,7 @@
 package com.example.letschat;
 
 
+import android.content.Intent
 import android.os.Bundle;
 import android.util.Log
 
@@ -17,7 +18,7 @@ import kotlinx.android.synthetic.main.fragment_friends.*
 import kotlinx.android.synthetic.main.fragment_requests.*
 import java.lang.NullPointerException
 
-class RequestsFragment(val friendRequestsDatabaseResponse: ArrayList<Users>) : Fragment() {
+class RequestsFragment(val friendRequestsDatabaseResponse: ArrayList<Users>) : Fragment(), FriendRequestsRecyclerViewAdaptor.OnItemClick {
 
     private val TAG : String = "RequestFragment"
     private var currentUser : FirebaseUser? = FirebaseAuth.getInstance().currentUser
@@ -44,6 +45,7 @@ class RequestsFragment(val friendRequestsDatabaseResponse: ArrayList<Users>) : F
         Log.d(TAG, "fetching data")
         fetchData()
         adaptor = FriendRequestsRecyclerViewAdaptor(friendRequestsDatabaseResponse, context ?: throw NullPointerException())
+        adaptor.setonClick(this)
         retainInstance = true
 
     }
@@ -102,5 +104,12 @@ class RequestsFragment(val friendRequestsDatabaseResponse: ArrayList<Users>) : F
                 TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
             }
         })
+    }
+
+    override fun onItemClick(position: Int, user: Users) {
+        val profileIntent = Intent(activity, ProfileActivity::class.java).apply {
+            putExtra("UserId", user.uid)
+        }
+        startActivity(profileIntent)
     }
 }
