@@ -39,7 +39,7 @@ public class AllUsersActivity extends AppCompatActivity implements AllUsersRecyc
     private Toolbar mToolbar;
     private boolean done = false;
     private static String TAG = "AllUsersActivity";
-    private ArrayList<DataSnapshot> usersDatabaseResponse;
+    private ArrayList<Users> usersDatabaseResponse;
     private AllUsersRecyclerViewAdaptor allUsersRecyclerViewAdaptor;
     private Query query;
     private ProgressDialog mProgressDialog;
@@ -90,7 +90,14 @@ public class AllUsersActivity extends AppCompatActivity implements AllUsersRecyc
                     if(dataSnapshot1.getKey().equals(FirebaseAuth.getInstance().getCurrentUser().getUid()))
                         continue;
 
-                    usersDatabaseResponse.add(dataSnapshot1);
+                    String uid = dataSnapshot.getKey();
+                    String name = dataSnapshot.child("name").getValue().toString();
+                    String status = dataSnapshot.child("status").getValue().toString();
+                    String profile_image = dataSnapshot.child("thumbnail_image").getValue().toString();
+
+                    Users user = new Users(uid, name, profile_image, status);
+
+                    usersDatabaseResponse.add(user);
                     Log.d(TAG, "Item Count : " + usersDatabaseResponse.size());
                     allUsersRecyclerViewAdaptor.notifyDataSetChanged();
                     done = true;
@@ -112,7 +119,7 @@ public class AllUsersActivity extends AppCompatActivity implements AllUsersRecyc
     public void onItemClick(int position) {
         Intent profileActivity = new Intent(AllUsersActivity.this, ProfileActivity.class);
         //sending userID to the intent
-        profileActivity.putExtra("UserId", usersDatabaseResponse.get(position).getKey());
+        profileActivity.putExtra("UserId", usersDatabaseResponse.get(position).getUid());
         startActivity(profileActivity);
     }
 }

@@ -20,7 +20,7 @@ import java.util.ArrayList;
 public class AllUsersRecyclerViewAdaptor extends RecyclerView.Adapter<AllUsersRecyclerViewAdaptor.ViewHolder> {
 
     private static final String TAG = "AllUsersRecyclerViewAda";
-    private ArrayList<DataSnapshot> usersDatabaseResponse;
+    private ArrayList<Users> usersDatabaseResponse;
     private Context mContext;
     private Query query;
 
@@ -31,7 +31,7 @@ public class AllUsersRecyclerViewAdaptor extends RecyclerView.Adapter<AllUsersRe
 
     private OnItemClick onClick;
 
-    public AllUsersRecyclerViewAdaptor(final ArrayList<DataSnapshot> usersDatabaseResponse, Context mContext) {
+    public AllUsersRecyclerViewAdaptor(final ArrayList<Users> usersDatabaseResponse, Context mContext) {
         this.usersDatabaseResponse = usersDatabaseResponse;
         this.mContext = mContext;
     }
@@ -48,9 +48,9 @@ public class AllUsersRecyclerViewAdaptor extends RecyclerView.Adapter<AllUsersRe
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, final int position) {
         Log.d(TAG, "onBindViewHolder called");
-        String name = usersDatabaseResponse.get(position).child("name").getValue().toString();
-        String status = usersDatabaseResponse.get(position).child("status").getValue().toString();
-        String profile_image = usersDatabaseResponse.get(position).child("thumbnail_image").getValue().toString();
+        String name = usersDatabaseResponse.get(position).getName();
+        String status = usersDatabaseResponse.get(position).getStatus();
+        String profile_image = usersDatabaseResponse.get(position).getProfile_image();
         Log.d(TAG, "view holder name : " + name);
         Log.d(TAG, "view holder status : " + status);
         holder.name.setText(name);
