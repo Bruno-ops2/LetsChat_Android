@@ -30,8 +30,9 @@ public class Users {
         return status;
     }
 
-
-
+    public String getUid() {
+        return uid;
+    }
 
     //setters
     public void setName(String name) {
@@ -45,6 +46,8 @@ public class Users {
     public void setProfile_image(String profile_image) {
         this.profile_image = profile_image;
     }
+
+    public void setUid(String uid) { this.uid = uid; }
 
     @Override
     public boolean equals(@Nullable Object obj) {
